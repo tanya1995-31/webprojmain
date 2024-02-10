@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body style="text-align: center;" class="bg-amber-900"
+        background="./background_photos/backgrounddddd.jpeg">
+    <div class="container mx-auto p-8"
+   >
+        <!-- Book details content goes here -->
+        <h2 class="text-3xl font-bold mb-4 text-blue-500">Book Details</h2>
+        <div id="bookDetails" class="bg-white p-6 rounded-lg shadow-md">
+            <!-- Book details will be dynamically added here using JavaScript -->
+        </div>
+
+        <div class="mt-8">
+            <h2 class="text-3xl font-bold mb-4">Leave a Review</h2>
+            <form id="reviewForm">
+        
+                <div class="mb-4">
+                    <input id="bookTitle" type="text" placeholder="Book Title" class="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <input id="authorName" type="text" placeholder="Author Name" class="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500">
+                </div>
+               
+                <div class="mb-4">
+                    <textarea id="reviewText" rows="4" placeholder="Your Review" class="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold mb-2">Rate the book:</p>
+                    <div style="text-align: center;">
+                        <div class="flex justify-center" class="flex">
+
+                        <!-- Star rating buttons -->
+                        <button type="button" class="mr-2" onclick="rateBook(1)">⭐</button>
+                        <button type="button" class="mr-2" onclick="rateBook(2)">⭐</button>
+                        <button type="button" class="mr-2" onclick="rateBook(3)">⭐</button>
+                        <button type="button" class="mr-2" onclick="rateBook(4)">⭐</button>
+                        <button type="button" onclick="rateBook(5)">⭐</button>
+                    </div>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit Review</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to render book details on the book details page
+        function renderBookDetails(title, author,image) {
+            const bookDetailsContainer = document.getElementById('bookDetails');
+            const details = document.createElement('div');
+            details.innerHTML = `
+                <h3 class="text-xl font-semibold mb-2">${title}</h3>
+                <p class="text-gray-600 mb-2">${author}</p>
+                <img src="${image}" alt="${"error"}" class="mb-4 rounded-md w-32 h-45">
+                <!-- Add more details as needed -->
+            `;
+            bookDetailsContainer.appendChild(details);
+        }
+
+        // Get book details from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookTitle = urlParams.get('title');
+        const authorName = urlParams.get('author');
+        const bookImageSrc = urlParams.get('imgSrc'); // Assuming you're passing the image source URL as a parameter
+
+
+
+        // Render book details
+        renderBookDetails(bookTitle, authorName,bookImageSrc);
+    </script>
+</body>
+
+</html>

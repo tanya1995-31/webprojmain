@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class=" bg-cover justify-center items-center" style="background-image:url(./background_photos/backgrounddddd.jpeg);">
+    <div class="flex justify-center items-center h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4">Welcome to our website!</h2>
+            <p class="text-gray-600 mb-6">Create your account below:</p>
+            <form action="register.php" method="post">
+
+                <div class="mb-4">
+                    <label for="Username" class="block text-gray-700 font-semibold mb-2">Enter Username:</label>
+                    <input type="Username" id="Username" name="Username" required
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 font-semibold mb-2">Email:</label>
+                    <input type="email" id="email" name="email" required
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700 font-semibold mb-2">Password:</label>
+                    <input type="password" id="password" name="password" required
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="verifypassword" class="block text-gray-700 font-semibold mb-2">Verify Password:</label>
+                    <input type="verifypassword" id="verifypassword" name="verifypassword" required
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div class="flex justify-center">
+                    <button type="submit"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
