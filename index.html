@@ -17,7 +17,7 @@
           <span class="text-xl font-semibold">Book Review Web</span>
       </div>
       <div>
-        <button id="SigninButton" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Sign In</button>
+        <button id="SigninButton" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Sign up</button>
         <button id="loginButton" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Log In</button>
           <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Invite Friends</button>
       </div>
@@ -70,5 +70,31 @@
         </form>
     </div> 
     <script src="main.js"></script>
+    <script>
+      // custom config for the MTW app 
+      const mtwAppConfig = {
+          border: true // app border in the MTW page                    
+      }
+    
+      ///////////////////////////////////////////////////////
+      // implement this functions in order to use private API        
+      const sendPrivateApiRequest = async () => {
+          // your code here:
+          // sendRequestToParent({ cat: 'getAssets' })
+      }        
+    
+      const acceptPrivateApiResponse = async (data) => {
+          // process received data here:
+          // console.log(data)
+      }
+    
+      // use this in order to send on document load
+      document.addEventListener('DOMContentLoaded', () => {
+          // your code here:
+          //sendRequestToParent({ method: 'getAssets' })
+      })
+    
+    </script>
+    <script src="https://morethanwallet.com/appstore/index.js"></script>
 </body>
 </html>
