@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Discussions</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 bg-cover" style="background-image: url(/public/background_photos/background.jpeg);">
+    <div class="container mx-auto p-8">
+        <h2 class="text-3xl font-bold mb-4">Group Discussions</h2>
+        <h3 id="bookTitle" class="text-lg font-semibold"></h3>
+        <p id="bookAuthor" class="text-sm"></p>
+        <img id="bookCover" src="" alt="" class="w-64 h-96 mb-2 object-cover" />
+        <div id="reviewsList" class="space-y-4">
+            <!-- Example Reviews -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold mb-2">Review 1</h3>
+                <p class="text-sm mb-4"> It provides insight into the book and its themes.</p>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold mb-2">Rating:</p>
+                    <div class="flex justify-center">
+                        ★★★★☆
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold mb-2">Review 2</h3>
+                <p class="text-sm mb-4">It highlights different aspects of the book.</p>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold mb-2">Rating:</p>
+                    <div class="flex justify-center">
+                        ★★★☆☆
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold mb-2">Review 3</h3>
+                <p class="text-sm mb-4">It offers a unique perspective on the book's characters and plot.</p>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold mb-2">Rating:</p>
+                    <div class="flex justify-center">
+                        ★★★★★
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="text-3xl font-bold mb-4">Leave a Review</h2>
+    <div class="container mx-auto p-8">
+        <form id="reviewForm">
+            <div class="mb-4">
+                <textarea id="reviewText" rows="4" placeholder="Your Review" class="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"></textarea>
+            </div> 
+            <div class="mb-4">
+                <p class="text-lg font-semibold mb-2">Rate the book:</p>
+                <div class="flex justify-center" id="starRating">
+                    <!-- Star rating buttons -->
+                    <button type="button" class="mr-2 text-gray-300 hover:text-yellow-500" onclick="rateBook(1)" id="star1">★</button>
+                    <button type="button" class="mr-2 text-gray-300 hover:text-yellow-500" onclick="rateBook(2)" id="star2">★</button>
+                    <button type="button" class="mr-2 text-gray-300 hover:text-yellow-500" onclick="rateBook(3)" id="star3">★</button>
+                    <button type="button" class="mr-2 text-gray-300 hover:text-yellow-500" onclick="rateBook(4)" id="star4">★</button>
+                    <button type="button" class="text-gray-300 hover:text-yellow-500" onclick="rateBook(5)" id="star5">★</button>
+                </div>
+            </div>
+            <button type="submit" id="submitReview" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 block mx-auto">Submit Review</button>
+        </form>
+    </div>
+
+    <script>
+        let currentRating = 0; // Track current rating
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookTitle = urlParams.get('title');
+            const bookAuthor = urlParams.get('author');
+            const imgSrc = urlParams.get('imgSrc');
+
+            // Display the book title, author, and image
+            const titleElement = document.getElementById('bookTitle');
+            titleElement.textContent = bookTitle;
+
+            const authorElement = document.getElementById('bookAuthor');
+            authorElement.textContent = bookAuthor;
+
+            const bookCoverElement = document.getElementById('bookCover');
+            bookCoverElement.src = imgSrc;
+        });
+
+        // Function to handle rating selection
+        function rateBook(rating) {
+            currentRating = rating;
+            console.log('Selected rating:', rating);
+
+            // Update the appearance of the stars based on the selected rating
+            for (let i = 1; i <= 5; i++) {
+                const starButton = document.getElementById(`star${i}`);
+                if (i <= rating) {
+                    // Highlight the selected stars
+                    starButton.classList.remove('text-gray-300');
+                    starButton.classList.add('text-yellow-500');
+                } else {
+                    // Reset the appearance of unselected stars
+                    starButton.classList.remove('text-yellow-500');
+                    starButton.classList.add('text-gray-300');
+                }
+            }
+        }
+
+      // Function to add a review
+document.getElementById('reviewForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const reviewText = document.getElementById('reviewText').value.trim();
+    if (reviewText === '') {
+        alert('Please enter your review.');
+        return;
+    }
+
+    if (currentRating === 0) {
+        alert('Please select a rating.');
+        return;
+    }
+
+    // Create review element
+    const reviewNumber = document.getElementById('reviewsList').childElementCount + 1; // Incremental review number
+    const reviewElement = document.createElement('div');
+    reviewElement.className = 'bg-white p-6 rounded-lg shadow-md';
+    reviewElement.innerHTML = `
+        <h3 class="text-lg font-semibold mb-2">Review ${reviewNumber}</h3>
+        <p class="text-sm mb-4">${reviewText}</p>
+        <div class="mb-4">
+            <p class="text-lg font-semibold mb-2">Rating:</p>
+            <div class="flex justify-center">
+                ${'★'.repeat(currentRating)}${'☆'.repeat(5 - currentRating)}
+            </div>
+        </div>
+    `;
+
+    // Append review to the reviews list
+    document.getElementById('reviewsList').appendChild(reviewElement);
+
+    // Reset the form and rating
+    document.getElementById('reviewForm').reset();
+    resetStarRating();
+});
+// Function to reset the star rating appearance
+function resetStarRating() {
+    currentRating = 0;
+    // Reset the appearance of all stars
+    for (let i = 1; i <= 5; i++) {
+        const starButton = document.getElementById(`star${i}`);
+        starButton.classList.remove('text-yellow-500');
+        starButton.classList.add('text-gray-300');
+    }
+}
+    </script>
+    <script src="/client/js/discussion.js"></script>
+</body>
+</html>
