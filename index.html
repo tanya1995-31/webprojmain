@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Display by Subject</title>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .subject-container {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .book {
+            width: 500px; 
+        }
+        /* Directly target h3 and p elements inside .book */
+        .book h3, .book p {
+            overflow-wrap: break-word; /* Allow long titles/names to wrap onto multiple lines */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 bg-cover" style="background-image: url('backgrounddddd.jpeg');">
+
+<!-- App-like Toolbar -->
+<div class="bg-gray-800 text-white py-4 px-8 flex justify-between items-center">
+    <div>
+        <span class="text-xl font-semibold">Book Review Web</span>
+    </div>
+    <div id="userActions">
+        
+    </div>
+</div>
+
+<form id="reviewForm">
+    <!-- Search Bar -->
+    <div class="mb-8 flex items-center">
+        <input id="searchInput" type="text" placeholder="Search for books..." class="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500">
+        <button id="searchButton" class="bg-blue-500 text-white px-4 py-2 ml-4 rounded-md hover:bg-blue-600">Search</button>
+    </div>
+</form>
+
+
+
+<h2 class="text-2xl font-bold mb-4">Books of Love</h2>
+<div id="loveContainer" class="subject-container flex overflow-x-auto space-x-4"></div>
+<br>
+<h2 class="text-2xl font-bold mb-4">Books of Kids</h2>
+<div id="kidsContainer" class="subject-container flex overflow-x-auto space-x-4"></div>
+<br>
+<h2 class="text-2xl font-bold mb-4">Books of Music</h2>
+<div id="musicContainer" class="subject-container flex overflow-x-auto space-x-4"></div>
+
+<!-- Include JavaScript file -->
+<script src="main.js"></script>
+</body>
+<script>
+    var loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    
+    const userActionsDiv = document.getElementById("userActions");
+
+    if (loggedInUser) {
+        userActionsDiv.innerHTML = `
+            <span class="mr-4">Hello, ${loggedInUser.username}!</span>
+            <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Log Out</button>
+        `;
+    } else {
+        userActionsDiv.innerHTML = `
+            <button id="signupButton" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Sign up</button>
+            <button id="loginButton" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Log In</button>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Contact Us</button>
+        `;
+        // Re-attach event listeners to login and signup buttons
+        document.getElementById("loginButton").addEventListener("click", function() {
+            window.location.href = "login.html";
+        });
+        document.getElementById("signupButton").addEventListener("click", function() {
+            window.location.href = "signup.html";
+        });
+    }
+
+    function logout() {
+        localStorage.removeItem("loggedInUser");
+        window.location.reload(); // Refresh the page to update the UI
+    }
+</script>
+</html>
