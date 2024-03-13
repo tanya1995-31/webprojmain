@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    color: #fff;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('./images/background.jpeg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.App {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Ensure it doesn't exceed the viewport width */
+    max-width: 1200px; /* Maximum width of the app */
+    padding: 1rem 0.5rem;
+}
+
+section {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Adjusted from flex-start to center */
+    padding: 1rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    padding-bottom: 1rem;
+}
+
+a, a:visited {
+    color: #fff;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+button,
+textarea {
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+label,
+button {
+  margin-top: 1rem;
+}
+
+button {
+  padding: 0.5rem;
+}
+
+.instructions {
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+    background: #000;
+    color: #fff;
+    padding: 0.25rem;
+    position: relative;
+    bottom: -10px;
+}
+
+.instructions > svg {
+    margin-right: 0.25rem;
+}
+
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
+
+.hide {
+    display: none;
+}
+
+.valid {
+    color: limegreen;
+    margin-left: 0.25rem;
+}
+
+.invalid {
+    color: red;
+    margin-left: 0.25rem;
+}
+
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.line {
+    display: inline-block;
+}
+
+.subject-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    border: 2px solid #ccc; /* Add border for the container */
+    border-radius: 8px; /* Optional: to round the corners */
+    padding: 16px 0; /* Add padding at the top and bottom inside the container */
+    padding-left: 16px;
+    width: 1900px; /* Set a fixed width to show 5-6 books at a time */
+}  
+
+.book {
+    display: inline-flex; /* Use inline-flex if you want to keep the structure of the book intact */
+    flex-direction: column; /* Optional: Ensures the content within each book is aligned vertically */
+    width: 300px; /* Adjust based on your design */
+    margin-right: 16px; /* Adjust the space between books as needed */
+    vertical-align: top;
+    background-color: white; /* Optional: adds background color to each book */
+    padding: 10px; /* Optional: adds some padding inside each book */
+    border-radius: 8px; /* Optional: rounds the corners of the book divs */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: adds a subtle shadow to each book */
+    color: black;
+}
+  
+/* Adjust the last book's margin to ensure consistent spacing */
+.subject-container > .book:last-child {
+  margin-right: 0;
+}
+  
+/* Directly target h3 and p elements inside .book */
+.book h3, .book p {
+    overflow-wrap: break-word; /* Allow long titles/names to wrap onto multiple lines */
+}
+
+.button-style {
+    background-color: #1a202c; /* Darker background for buttons */
+    color: #fff; /* White text */
+    padding: 0.5rem 1rem; /* Padding for size */
+    border-radius: 0.25rem; /* Rounded borders */
+    text-decoration: none; /* Remove underline from links */
+    transition: background-color 0.3s; /* Transition for hover effect */
+    margin-left: 0.5rem;
+}
+  
+.button-style:hover {
+  background-color: #2d3748; /* Slightly lighter color on hover */
+}
+
+/* Add to your existing styles */
+.flex-grow {
+  flex-grow: 1; /* This will push the buttons to the right */
+}
+  
+.text-center {
+  text-align: center;
+}
+
+.searchForm {
+  display: flex; /* Keeps the form elements inline */
+  justify-content: center; /* Center the form within its parent */
+  align-items: center; /* Center the form elements vertically */
+  margin: auto; /* Center the form horizontally */
+  gap: 0.5rem; /* Add space between the search input and button */
+  width: 100%; /* Take the full width of its container */
+  max-width: 1000px; /* Increase the max-width as needed */
+  padding: 1rem;
+}
+
+.searchForm input[type="text"] {
+  flex: 1; /* Allow input to grow and fill the available space */
+  padding: 0.5rem;
+  border-radius: 25rem;
+  outline: none;
+  border: 1px solid #ccc;
+  margin-right: 0.5rem; /* Ensure there is space between the input and the button */
+  width: 800px;
+}
+  
+.searchForm .searchButton {
+  padding: 0.5rem 1rem;
+  border-radius: 25rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap; /* Prevent text wrapping inside the button */
+  flex-shrink: 0; /* Prevent the button from shrinking */
+}
+  
+.searchForm .searchButton:hover {
+  background-color: #0056b3; /* Button background color on hover */
+}
+
+.searchForm label {
+  display: none; /* Hide label */
+}
+
+
+
+  
