@@ -17,6 +17,8 @@ function App() {
           <Route path="/signin" element={<Login />} />
           <Route path="/about" element={<About />} />
           <Route path="/contactus" element={<ContactUs />} />
+          {/*<Route path="/books/:title/:author/:imgSrc" element={<ViewBook />} />*/}
+
           {/* Add other routes as needed */}
         </Routes>
       </div>

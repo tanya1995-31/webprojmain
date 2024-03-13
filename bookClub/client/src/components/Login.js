@@ -4,7 +4,7 @@ import AuthContext from "../context/AuthProvider"
 import axios from '../api/axios'
 import Header from './Header'
 
-const LOGIN_URL = 'http://localhost:5000/login';
+const LOGIN_URL = 'http://localhost:5000/api/login';
 
 const Login = () => {
 

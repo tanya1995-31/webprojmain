@@ -14,7 +14,7 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 // Email required example@email.___ 
 const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-const REGISTER_URL = 'http://localhost:5000/register';
+const REGISTER_URL = 'http://localhost:5000/api/register';
 
 const Register = () => {
 
