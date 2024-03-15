@@ -2,6 +2,7 @@ import React from 'react'
 import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle  } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from 'react-router-dom';
 import axios from '../api/axios';
 import Header from './Header';
 
@@ -47,16 +48,12 @@ const Register = () => {
     // useEffect hook for handling side effects in functional components.
     useEffect(() => {
         const result = USER_REGEX.test(user); // Test the current 'user' value against the USER_REGEX pattern.
-        console.log(result);
-        console.log(user);
         setValidName(result);
     }, [user]) // Dependency array: This effect runs after the first render and anytime the 'user' value changes.
     
     // useEffect hook for handling side effects in functional components.
     useEffect(() => {
         const result = PWD_REGEX.test(pwd); // Test the current 'password' value against the USER_REGEX pattern.
-        console.log(result);
-        console.log(pwd);
         setValidPwd(result);
         const match = pwd === matchPwd; // check if the password is equal to the matching password
         setValidMatch(match);
@@ -69,8 +66,6 @@ const Register = () => {
   
     useEffect(() => {
         const result = EMAIL_REGEX.test(email); // Test the current 'email' value against the EMAIL_REGEX pattern.
-        console.log(result);
-        console.log(email);
         setValidEmail(result); // Corrected from setValidName to setValidEmail
     }, [email])
     
@@ -82,8 +77,7 @@ const Register = () => {
         if (!isUsernameValid || !isPasswordValid || !isEmailValid) {
             setErrMsg("Invalid Entry");
             return;
-        }
-        
+        }  
         try {
             const response = await axios.post(REGISTER_URL,
                 JSON.stringify({ username: user, password: pwd, email: email }),
@@ -121,7 +115,7 @@ const Register = () => {
                     <section>
                         <h1>Success!</h1>
                         <p>
-                            <a href="#">Sign In</a>
+                            <Link to="/signin">Sign In</Link>
                         </p>
                     </section>
             ) : (
@@ -245,8 +239,8 @@ const Register = () => {
                         <p>
                             Already Registered?<br />
                             <span className='line'>
-                                {/* PUT LINK TO SIGN IN PAGE */}
-                                <a href='#'>Sign In</a> 
+                                {/* Move to Sign In page after registered success */}
+                                <Link to="/signin">Sign In</Link> 
                             </span>
                         </p>
                     </form>
