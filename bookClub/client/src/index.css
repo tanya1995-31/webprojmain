@@ -134,6 +134,7 @@ button {
     display: inline-flex; /* Use inline-flex if you want to keep the structure of the book intact */
     flex-direction: column; /* Optional: Ensures the content within each book is aligned vertically */
     width: 300px; /* Adjust based on your design */
+    height: 650px;
     margin-right: 16px; /* Adjust the space between books as needed */
     vertical-align: top;
     background-color: white; /* Optional: adds background color to each book */
@@ -141,6 +142,7 @@ button {
     border-radius: 8px; /* Optional: rounds the corners of the book divs */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: adds a subtle shadow to each book */
     color: black;
+    position: relative;
 }
   
 /* Adjust the last book's margin to ensure consistent spacing */
@@ -162,6 +164,17 @@ button {
     transition: background-color 0.3s; /* Transition for hover effect */
     margin-left: 0.5rem;
 }
+
+.view-book-button {
+  position: absolute; /* Position the button absolutely... */
+  bottom: 10px; /* ...at the bottom of the container */
+  left: 50%; /* Center the button horizontally */
+  transform: translateX(-50%); /* Adjust horizontal centering considering button's width */
+  width: 80%; /* Set button width or max-width as per design requirements */
+  padding: 0.5rem 1rem; /* Adjust button padding */
+  border-radius: 25rem;
+  background-color: #007bff;
+  color: #fff;}
   
 .button-style:hover {
   background-color: #2d3748; /* Slightly lighter color on hover */

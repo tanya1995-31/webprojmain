@@ -36,9 +36,9 @@ const Home = () => {
     }
   };
 
-  const redirectToDiscussion = (book) => {
+  const ViewBooks = (book) => {
     navigate(`/books/${encodeURIComponent(book.title)}/${encodeURIComponent(book.author)}/${encodeURIComponent(book.imgSrc)}`);
-  };
+  };  
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -62,7 +62,7 @@ const Home = () => {
                 <img src={book.coverImageUrl} alt={book.title} className="w-full h-48 mb-2 object-cover" />
                 <h3 className="text-lg font-semibold">{book.title}</h3>
                 <p className="text-sm">{book.author}</p>
-                <button onClick={() => redirectToDiscussion(book)} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">
+                <button onClick={() => ViewBooks(book)} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">
                   View Book
                 </button>
               </div>
@@ -78,7 +78,7 @@ const Home = () => {
                     <img src={book.coverImageUrl} alt={book.title} className="w-full h-48 mb-2 object-cover" />
                     <h3 className="text-lg font-semibold">{book.title}</h3>
                     <p className="text-sm">{book.author}</p>
-                    <button onClick={() => redirectToDiscussion(book)} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">
+                    <button onClick={() => ViewBooks(book)}   className="view-book-button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">
                       View Book
                     </button>
                   </div>

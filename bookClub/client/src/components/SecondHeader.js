@@ -8,7 +8,7 @@ const SecondHeader = () => {
   const renderLinks = () => {
     if (isLoggedIn) {
       return (
-        <>
+        <>  
           <span className="button-style mr-4">Welcome, {localStorage.getItem('username')}</span>
           <button className="button-style" onClick={logout}>Log Out</button>
         </>

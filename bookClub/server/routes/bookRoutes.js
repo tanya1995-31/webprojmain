@@ -5,8 +5,8 @@ const Book = require('../models/Book');
 
 const router = express.Router();
 
-// Route to fetch and store books by subject
-router.get('/fetch-books', async (req, res) => {
+// Function to fetch and store books by subject
+const fetchAndStoreBooks = async () => {
   try {
     const subjects = ['love', 'kids', 'fantasy'];
     for (const subject of subjects) {
@@ -29,18 +29,28 @@ router.get('/fetch-books', async (req, res) => {
         );
       }
     }
-
-    res.status(200).json({ message: 'Books fetched and stored successfully' });
+    console.log('Books fetched and stored successfully');
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to fetch and store books', error: error.message });
+    console.error('Failed to fetch and store books', error);
   }
+};
+
+// Call fetchAndStoreBooks function when the server starts
+fetchAndStoreBooks();
+
+// Route to fetch and store books by subject
+router.get('/fetch-books', async (req, res) => {
+  res.status(200).json({ message: 'Fetching and storing books automatically triggered' });
 });
 
-// Route to get all books from the database
+// Fetch the books by subject from mongoDB
 router.get('/books', async (req, res) => {
   try {
-    const books = await Book.find();
+    let query = {};
+    if (req.query.subject) {
+      query.subject = req.query.subject; // Add filtering by subject
+    }
+    const books = await Book.find(query);
     res.status(200).json(books);
   } catch (error) {
     console.error(error);
@@ -65,4 +75,4 @@ router.get('/search-books', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router;

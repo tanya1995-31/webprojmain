@@ -7,9 +7,9 @@ const bookSchema = new mongoose.Schema({
   subject: { type: String, required: true } 
 });
 
-const Book = mongoose.model('Book', bookSchema);
-
-// Search books by title / author
+// Correct placement: Define indexes before creating the model
 bookSchema.index({ title: 'text', author: 'text' });
+
+const Book = mongoose.model('Book', bookSchema);
 
 module.exports = Book;
