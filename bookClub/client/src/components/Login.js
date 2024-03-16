@@ -3,11 +3,13 @@ import { useRef, useState, useEffect, useContext } from 'react'
 import AuthContext from "../context/AuthProvider"
 import axios from '../api/axios'
 import Header from './Header'
+import { useNavigate } from 'react-router-dom';
 
-const LOGIN_URL = 'http://localhost:5000/api/login';
+const LOGIN_URL = '/api/login';
 
 const Login = () => {
-
+    
+    const navigate = useNavigate();
     const { setAuth } = useContext(AuthContext);
     const userRef = useRef();
     const errRef = useRef();
@@ -37,13 +39,18 @@ const Login = () => {
                     withCredentials: true
                 }
             ); 
+            
             console.log(JSON.stringify(response?.data));
-            const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
-            setAuth({ user, pwd, roles, accessToken });
+           
+            // Update the auth state with the username and accessToken
+            setAuth({ user: response.data.username });
+            // Reset the form fields
             setUser('');
             setPwd('');
+            // Indicate that login was successful
             setSuccess(true);
+            // Redirect the user to the home page
+            navigate('/');
 
         } catch (err) {
             if(!err?.response) {

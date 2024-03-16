@@ -174,7 +174,8 @@ button {
   padding: 0.5rem 1rem; /* Adjust button padding */
   border-radius: 25rem;
   background-color: #007bff;
-  color: #fff;}
+  color: #fff;
+}
   
 .button-style:hover {
   background-color: #2d3748; /* Slightly lighter color on hover */
@@ -229,6 +230,10 @@ button {
   display: none; /* Hide label */
 }
 
+.welcome-message {
+  margin-left: 20px;
+  font-size: 1.5rem; /* Example size, adjust as needed */
+  color: #fff; /* Example color, adjust as needed */
+  font-weight: bold;
+}
 
-
-  

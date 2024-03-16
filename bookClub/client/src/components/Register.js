@@ -117,6 +117,10 @@ const Register = () => {
                         <p>
                             <Link to="/signin">Sign In</Link>
                         </p>
+                        <br />
+                        <p>
+                            <Link to="/">Home</Link>
+                        </p>
                     </section>
             ) : (
                 <section>

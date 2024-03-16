@@ -6,23 +6,26 @@ import Register from './components/Register';
 import Login from './components/Login';
 import About from './components/About';
 import ContactUs from './components/ContactUs';
+import { AuthProvider } from './context/AuthProvider'; // Import the AuthProvider
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route path="/signup" element={<Register />} />
-          <Route path="/signin" element={<Login />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contactus" element={<ContactUs />} />
-          {/*<Route path="/books/:title/:author/:imgSrc" element={<ViewBook />} />*/}
+    <AuthProvider>
+      <Router>
+        <div>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/signup" element={<Register />} />
+            <Route path="/signin" element={<Login />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            {/*<Route path="/books/:title/:author/:imgSrc" element={<ViewBook />} />*/}
 
-          {/* Add other routes as needed */}
-        </Routes>
-      </div>
-    </Router>
+            {/* Add other routes as needed */}
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

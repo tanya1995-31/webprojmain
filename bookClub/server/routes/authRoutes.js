@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => { // Ensure endpoint is lowercase t
             res.status(500).json({ message: 'Error registering new user', error: error.message });
         }
     }
-  }); 
+}); 
 
 // Login route
 router.post('/login', async (req, res) => {
@@ -52,9 +52,16 @@ router.post('/login', async (req, res) => {
                     process.env.JWT_SECRET,
                     { expiresIn: '1h' }
                 );
+                    
+                // Send the JWT in a cookie
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production', // true if in production
+                    maxAge: 3600000 // should match the token's expiration time
+                });
   
                 // Respond with token
-                res.json({ message: "Login successful", accessToken: token });
+                res.json({ message: "Login successful", username: user.username });
             } else {
                 // Passwords do not match
                 res.status(401).json({ message: "Invalid credentials" });
@@ -67,6 +74,33 @@ router.post('/login', async (req, res) => {
         console.error(error);
         res.status(500).json({ message: "Server error" });
     }
-  });
+});
 
+// Logout route
+router.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ message: 'Logout successful' });
+});
+
+// Verify route
+router.get('/verify', (req, res) => {
+    try {
+        // Assuming the JWT token is sent in an HttpOnly cookie named 'token'
+        const token = req.cookies['token'];
+        if (!token) {
+            return res.status(401).json({ isLoggedIn: false });
+        }
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ isLoggedIn: false });
+            }
+
+            // Assuming 'decoded' contains a 'username' property
+            res.json({ isLoggedIn: true, username: decoded.username });
+        });
+    } catch (error) {
+        res.status(401).json({ isLoggedIn: false, message: "Error verifying token" });
+    }
+});
+  
 module.exports = router;
