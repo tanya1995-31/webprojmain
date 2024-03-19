@@ -6,6 +6,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import About from './components/About';
 import ContactUs from './components/ContactUs';
+import ViewBook from './components/ViewBook';
 import { AuthProvider } from './context/AuthProvider'; // Import the AuthProvider
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/signin" element={<Login />} />
             <Route path="/about" element={<About />} />
             <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/books/:id" element={<ViewBook />} />
             {/*<Route path="/books/:title/:author/:imgSrc" element={<ViewBook />} />*/}
 
             {/* Add other routes as needed */}
