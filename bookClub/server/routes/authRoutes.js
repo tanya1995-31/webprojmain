@@ -37,8 +37,10 @@ router.post('/register', async (req, res) => { // Ensure endpoint is lowercase t
 // Login route
 router.post('/login', async (req, res) => {
     try {
+        console.log(req);
         // Find the user by username
         const user = await User.findOne({ username: req.body.username });
+        console.log(user);
   
         // Check if user exists
         if (user) {
@@ -52,7 +54,7 @@ router.post('/login', async (req, res) => {
                     process.env.JWT_SECRET,
                     { expiresIn: '1h' }
                 );
-                    
+                console.log("JWT_SECRET:", process.env.JWT_SECRET);
                 // Send the JWT in a cookie
                 res.cookie('token', token, {
                     httpOnly: true,
