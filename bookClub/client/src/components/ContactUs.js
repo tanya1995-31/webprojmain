@@ -1,28 +1,71 @@
-import React from 'react';
-import Header from './Header';
+import React, { useState } from 'react';
+import axios from 'axios'; // Ensure axios is installed and imported for HTTP requests
 
 const ContactUs = () => {
   const members = [
-    { name: "Ran Polac", email: "ranpolac@gmail.com" },
-    { name: "Omri Shalev", email: "omrishalev@gmail.com" },
-    { name: "Tanya Gendelman", email: "tanya@gmail.com" },
-    { name: "Almog Kadosh", email: "almog@gmail.com" }
+    { id: 1, name: "Ran Polac", email: "ranpolac@gmail.com" },
+    { id: 2, name: "Omri Shalev", email: "omrishalev@gmail.com" },
+    { id: 3, name: "Tanya Gendelman", email: "tanya@gmail.com" },
+    { id: 4, name: "Almog Kadosh", email: "almog@gmail.com" }
   ];
 
+  const [userName, setUserName] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('http://localhost:5000/api/message', { 
+        userName,
+        message,
+        time: new Date(),
+      });
+
+      setIsSubmitted(true);
+      setMessage('');
+      setUserName('');
+      setTimeout(() => setIsSubmitted(false), 5000); // Reset submission status after 5 seconds
+    } catch (error) {
+      console.error("Failed to submit message:", error);
+    }
+  };
+
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <Header header='Contact Us' />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
-        {members.map((member, index) => (
-          <div key={index} style={{ backgroundColor: '#f0f0f0', padding: '15px', borderRadius: '8px' }}>
-            <h3 style={{ marginTop: '0', marginBottom: '10px', fontSize: '40px', color: 'blue' }}>{member.name}</h3>
-            <p style={{ marginTop: '0', fontSize: '24px', color: 'green' }}>Email: {member.email}</p>
-          </div>
-        ))}
-      </div>
-      {/* Your contact form and other content can go here */}
+    <div className="App">
+      <section>
+        <h1>Contact Us</h1>
+        <div className="members-info ">
+          {members.map((member) => (
+            <div key={member.id} className="member-info">
+              <p>{member.name} - {member.email}</p>
+            </div>
+          ))}
+        </div>
+        {isSubmitted && <div className="submission-success">Thank you for your message!</div>}
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="userName">Your Name:</label>
+          <input
+            type="text"
+            id="userName"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            placeholder="Your name..."
+            className="form-input"
+          />
+          <label htmlFor="message">Message:</label>
+          <textarea
+            id="message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Write your message here..."
+            className="form-textarea"
+          ></textarea>
+          <button type="submit" className="button-style">Submit</button>
+        </form>
+      </section>
     </div>
   );
 };
 
-export default ContactUs;
+export default ContactUs;

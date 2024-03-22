@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useContext } from "react";
 import axios from "../api/axios";
 
 const AuthContext = createContext({});
@@ -7,6 +7,27 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({});
+
+    // Check login status
+    const checkLoginStatus = async () => {
+        try {
+            const response = await axios.get('/api/verify', { withCredentials: true });
+            const { isLoggedIn, username } = response.data;
+            if (isLoggedIn) {
+                setAuth({ user: username });
+            } else {
+                setAuth({});
+            }
+        } catch (error) {
+            // Silent handling of unauthorized errors, updating state to reflect not logged in.
+            if (error.response?.status === 401) {
+                setAuth({});
+            } else {
+                // Log other errors for debugging purposes.
+                console.error('Unexpected error during auth verification:', error);
+            }
+        }
+    };
 
     // Logout function that also tells the server to clear the cookie
     const logout = async () => {
@@ -18,30 +39,11 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
           console.error('Logout failed:', error);
         }
+        await checkLoginStatus();
     };
-
-    // Check login status
-    const checkLoginStatus = async () => {
-        try {
-            const response = await axios.get('/api/verify', { withCredentials: true });
-            const { isLoggedIn, username } = response.data;
-            if (isLoggedIn) {
-                setAuth({ user: username });
-            } else {
-                setAuth(null);
-            }
-        } catch (error) {
-            console.error('Auth verification failed:', error);
-            setAuth(null);
-        }
-    };
-
-    useEffect(() => {
-        checkLoginStatus();
-    }, []);
-
+    
     return (
-        <AuthContext.Provider value={{ auth, setAuth, logout }}>
+        <AuthContext.Provider value={{ auth, setAuth, logout, checkLoginStatus }}>
             {children}
         </AuthContext.Provider>
     );

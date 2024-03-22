@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/bookRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -37,7 +38,7 @@ mongoose.connect('mongodb://localhost:27017/bookClub', {
 // Prefix all bookRoutes and authRoutes with '/api'
 app.use('/api', bookRoutes);
 app.use('/api', authRoutes);
-app.use('/api', authRoutes);
+app.use('/api', messageRoutes);
 
 // Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

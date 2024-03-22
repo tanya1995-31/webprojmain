@@ -9,7 +9,7 @@ router.post('/register', async (req, res) => { // Ensure endpoint is lowercase t
     try {
         const { username, password, email } = req.body;
   
-        // Hash the password with a salt round of 10 (the higher the number, the more secure but slower the hashing process)
+        // Hash the password 
         const hashedPassword = await bcrypt.hash(password, 10);
   
         // Create a new user with the hashed password
@@ -84,23 +84,19 @@ router.post('/logout', (req, res) => {
 
 // Verify route
 router.get('/verify', (req, res) => {
-    try {
-        // Assuming the JWT token is sent in an HttpOnly cookie named 'token'
-        const token = req.cookies['token'];
-        if (!token) {
-            return res.status(401).json({ isLoggedIn: false });
-        }
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-            if (err) {
-                return res.status(401).json({ isLoggedIn: false });
-            }
-
-            // Assuming 'decoded' contains a 'username' property
-            res.json({ isLoggedIn: true, username: decoded.username });
-        });
-    } catch (error) {
-        res.status(401).json({ isLoggedIn: false, message: "Error verifying token" });
+    const token = req.cookies['token'];
+    console.log(token);
+    if (!token) {
+        return res.status(401).json({ isLoggedIn: false, message: "No token provided" });
     }
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            console.error('Token verification error:', err);
+            return res.status(401).json({ isLoggedIn: false, message: "Token verification failed" });
+        }
+        res.json({ isLoggedIn: true, username: decoded.username });
+    });
 });
+
   
 module.exports = router;
