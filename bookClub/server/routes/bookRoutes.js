@@ -79,9 +79,29 @@ router.post('/books/:id/comments', async (req, res) => {
 // Route to fetch comments for a specific book
 router.get('/books/:id/comments', async (req, res) => {
   try {
-    // Find all comments associated with the book ID
-    const comments = await Comments.find({ bookId: req.params.id });
-    res.status(200).json(comments);
+    const { id } = req.params;
+
+    // If the request includes a `since` query parameter, it means the client is polling for updates
+    const since = req.query.since;
+
+    // If `since` is provided, find comments updated since that timestamp
+    // Otherwise, find all comments associated with the book ID
+    const query = since ? { bookId: id, updatedAt: { $gt: new Date(since) } } : { bookId: id };
+
+    // Find comments based on the query
+    const comments = await Comments.find(query);
+
+    // If `since` is provided, respond immediately with any updates
+    if (since) {
+      res.status(200).json(comments);
+    } else {
+      // Otherwise, if `since` is not provided, wait for updates before responding
+      // For simplicity, let's just wait for a short time before responding
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
+      // Then return the current comments
+      res.status(200).json(comments);
+    }
   } catch (error) {
     console.error('Failed to fetch comments:', error);
     res.status(500).json({ message: 'Failed to fetch comments', error: error.message });
