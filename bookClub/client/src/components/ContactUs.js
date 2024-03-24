@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Ensure axios is installed and imported for HTTP requests
+import Header from './Header';
 
 const ContactUs = () => {
   const members = [
@@ -33,8 +34,8 @@ const ContactUs = () => {
 
   return (
     <div className="App">
+      <Header header='Contact Us'/>
       <section>
-        <h1>Contact Us</h1>
         <div className="members-info ">
           {members.map((member) => (
             <div key={member.id} className="member-info">
@@ -51,17 +52,19 @@ const ContactUs = () => {
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
             placeholder="Your name..."
-            className="form-input"
-          />
+            className="block w-full text-black px-4 py-2 border rounded-md"
+            />
           <label htmlFor="message">Message:</label>
           <textarea
             id="message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Write your message here..."
-            className="form-textarea"
+            className="block w-full text-black px-4 py-2 border rounded-md h-40"
           ></textarea>
-          <button type="submit" className="button-style">Submit</button>
+          <button type="submit" className="border-2 border-black text-white hover:bg-black hover:text-white font-bold py-1 px-3 rounded-full transition duration-300 mt-2">
+            Submit
+          </button>
         </form>
       </section>
     </div>

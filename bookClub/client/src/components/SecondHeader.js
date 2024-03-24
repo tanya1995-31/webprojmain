@@ -13,20 +13,20 @@ const SecondHeader = () => {
   };
 
   return (
-    <div className="flex justify-end items-center">
-        <Link to="/about" className="button-style mr-4">About</Link>
-        <Link to="/contactus" className="button-style">Contact Us</Link>
-        {isLoggedIn ? (
-            <>
-                <button className="button-style" onClick={handleLogout}>Log Out</button>
-                <span className="welcome-message">Welcome, {auth.user}</span>
-            </>
-        ) : (
-            <>
-                <Link to="/signup" className="button-style mr-4">Sign Up</Link>
-                <Link to="/signin" className="button-style">Sign In</Link>
-            </>
-        )}
+    <div className="flex justify-end items-center py-3 bg-blue-500 text-white">
+      <Link to="/about" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">About</Link>
+      <Link to="/contactus" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">Contact Us</Link>
+      {isLoggedIn ? (
+        <>
+          <button onClick={handleLogout} className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors">Log Out</button>
+          <span className="mr-4 text-sm font-semibold">Welcome, {auth.user}</span>
+        </>
+      ) : (
+        <>
+          <Link to="/signup" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">Sign Up</Link>
+          <Link to="/signin" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors">Sign In</Link>
+        </>
+      )}
     </div>
   );
 };

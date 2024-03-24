@@ -69,7 +69,7 @@ const Login = () => {
     return (
         <>
             <div>
-                <Header header='Sign In to Books Club'/>
+                <Header header='Sign In'/>
             </div>
             {success ? (
                     <section>
@@ -83,7 +83,6 @@ const Login = () => {
                 <section>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} 
                     aria-live="assertive">{errMsg}</p>
-                    <h1>Sign In</h1>
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="username">Username:</label>     
                         <input 
@@ -94,6 +93,7 @@ const Login = () => {
                             onChange={(e) => setUser(e.target.value)}
                             value={user}
                             required
+                            className="text-black"
                         />     
                         <label htmlFor="password">Password:</label>     
                         <input 
@@ -102,12 +102,17 @@ const Login = () => {
                             onChange={(e) => setPwd(e.target.value)}
                             value={pwd}
                             required
+                            className="text-black"
                         />     
-                        <button>Sign In</button>
+                        <button
+                            type="submit"
+                            className="border-2 border-black text-white hover:bg-black hover:text-white font-bold py-1 px-3 rounded-full transition duration-300 mt-2">                                
+                             Sign In
+                        </button>
                         <p>
                             Need an Account?<br />
                             <span className='line'>
-                                {/* PUT LINK TO SIGN IN PAGE */}
+                                {/* LINK TO SIGN IN PAGE */}
                                 <a href='/signup'>Sign Up</a> 
                             </span>
                         </p>

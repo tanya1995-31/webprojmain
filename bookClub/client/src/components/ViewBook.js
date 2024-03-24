@@ -44,24 +44,35 @@ const ViewBook = () => {
   }
 
   return (
-    <div>
-      <h1>{book.title}</h1>
-      <h2>{book.author}</h2>
-      <img src={book.coverImageUrl} alt={`Cover of ${book.title}`} />
-      <form onSubmit={handleCommentSubmit}>
+    <div className="p-4">
+      <h1 className="text-4xl lg:text-5xl font-bold text-white-800 my-4">{book.title}</h1>
+      <h2 className="text-xl lg:text-2xl font-semibold text-white-700 mb-4">{book.author}</h2>
+      <img 
+        src={book.coverImageUrl} 
+        alt={`Cover of ${book.title}`} 
+        className="w-full object-contain" 
+      />
+      <br />
+      <form onSubmit={handleCommentSubmit} >
         {/* Input field for the author's name */}
         <input
           type="text"
           value={authorName}
           onChange={(e) => setAuthorName(e.target.value)}
           placeholder="Your Name"
+          className="text-black"
         />
+        <br />
         <textarea
           value={commentText}
           onChange={(e) => setCommentText(e.target.value)}
           placeholder="Write your comment here..."
+          className="text-black"
         ></textarea>
-        <button type="submit">Submit Comment</button>
+        <br />
+        <button type="submit" className="border-2 border-black text-white hover:bg-black hover:text-white font-bold py-1 px-3 rounded-full transition duration-300 mt-2">
+          Submit Comment
+        </button>
       </form>
 
       {/* Display more book details as needed */}

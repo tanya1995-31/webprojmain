@@ -109,7 +109,7 @@ const Register = () => {
     return (
         <>
             <div>
-                <Header header='Sign Up to Books Club'/>
+                <Header header='Sign Up'/>
             </div>
             {success ? (
                     <section>
@@ -125,7 +125,6 @@ const Register = () => {
             ) : (
                 <section>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <h1>Register</h1>
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="username">
                             Username: 
@@ -147,6 +146,7 @@ const Register = () => {
                             aria-describedby='uidnote'
                             onFocus={() => setUserFocus(true)}
                             onBlur={() => setUserFocus(false)}
+                            className="text-black"
                         />
                         <p id='uidnote' className={userFocus && user && !validName ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle } />
@@ -174,6 +174,7 @@ const Register = () => {
                             aria-describedby="pwdnote"
                             onFocus={() => setPwdFocus(true)}
                             onBlur={() => setPwdFocus(false)}
+                            className="text-black"
                         />
                         <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
@@ -205,6 +206,7 @@ const Register = () => {
                             aria-describedby="confirmnote"
                             onFocus={() => setMatchFocus(true)}
                             onBlur={() => setMatchFocus(false)}
+                            className="text-black"
                         />
                         <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
@@ -230,6 +232,7 @@ const Register = () => {
                             aria-describedby="emailnote"
                             onFocus={() => setEmailFocus(true)}
                             onBlur={() => setEmailFocus(false)}
+                            className="text-black"
                         />
                         <p id="emailnote" className={emailFocus && !validEmail ? "instructions" : "offscreen"}>
                         <FontAwesomeIcon icon={faInfoCircle} />
@@ -237,7 +240,9 @@ const Register = () => {
                         </p>
 
 
-                        <button disabled={!validName || !validPwd || !validMatch ? true : false}>
+                        <button 
+                            disabled={!validName || !validPwd || !validMatch ? true : false} type="submit"
+                            className="border-2 border-black text-white hover:bg-black hover:text-white font-bold py-1 px-3 rounded-full transition duration-300 mt-2">
                             Sign Up
                         </button>
                         <p>

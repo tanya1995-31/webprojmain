@@ -6,6 +6,8 @@ import Header from './Header';
 import SecondHeader from './SecondHeader';
 import SearchBar from './SearchBar';
 
+import MyCarousel from './MyCarousel';
+
 const Home = () => {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -76,48 +78,53 @@ const Home = () => {
     navigate(`/books/${bookId}`);
   };  
 
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-gray-100 bg-cover" style={{ backgroundImage: "url('backgrounddddd.jpeg')" }}>
-        <Header header='Books Club Web'/>
-        <SecondHeader />
-        <SearchBar
-          search={search}
-          setSearch={(value) => {
-            setSearch(value); // Set the search state with the new value
-            handleSearch(value); // Trigger the search function with the new value
-          }}
-          onSearch={handleSearch}
-        />
-  
-        {/* Display the subjects and their books */}
-        {subjects.map(subject => (
-          <div key={subject} className="subject-section">
-            {/* Display the section header based on search results */}
-            {searchInitiated && booksDataBySubject[subject].length > 0 ? (
-              <h2 className="text-2xl font-bold mb-4">Search Results for {subject.charAt(0).toUpperCase() + subject.slice(1)}</h2>
-            ) : (
-              <h2 className="text-2xl font-bold mb-4">Books of {subject.charAt(0).toUpperCase() + subject.slice(1)}</h2>
-            )}
-  
-            <div className="subject-container flex overflow-x-auto space-x-4">
-              {/* Display books depending on whether we have search results */}
-              {(searchInitiated ? booksDataBySubject[subject] : booksDataBySubject[subject]).map((book, index) => (
-                <div key={index} className="book flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-md">
-                  <img src={book.coverImageUrl} alt={book.title} className="w-full h-48 mb-2 object-cover" />
-                  <h3 className="text-lg font-semibold">{book.title}</h3>
-                  <p className="text-sm">{book.author}</p>
-                  <button onClick={() => ViewBooks(book._id)} className="view-book-button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4">
-                   View Book
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+  const renderBookItem = (book) => {
+    return (
+      // Use responsive classes for padding and margin (e.g., p-4 md:p-6)
+      <div key={book._id} className="book flex flex-col items-center justify-center p-4 md:p-6 bg-white rounded-lg shadow-md">
+        {/* Responsive image classes */}
+        <img src={book.coverImageUrl} alt={book.title} className="w-full h-auto md:h-80 object-cover" />
+        {/* Truncate long titles/authors */}
+        <h3 className="text-lg font-semibold truncate w-full">{book.title}</h3>
+        <p className="text-sm truncate w-full">{book.author}</p>
+        {/* Responsive button classes */}
+        <button onClick={() => ViewBooks(book._id)} className="view-book-button bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mt-4">
+          View Book
+        </button>
       </div>
-    </div>
-  );
+    );
+  };
+  
+
+
+  return (
+  <div className="min-h-screen bg-cover">
+      <Header header='Books Club Web'/>
+      <SecondHeader />
+      <SearchBar
+        search={search}
+        setSearch={(value) => {
+          setSearch(value); // Set the search state with the new value
+          handleSearch(value); // Trigger the search function with the new value
+        }}
+        onSearch={handleSearch}
+      />
+  
+      {subjects.map(subject => (
+        <div key={subject} className="subject-section mb-10">
+          <h2 className="text-2xl font-bold mb-4">
+            {searchInitiated && searchResults.length > 0 ? `Search Results for "${subject}"` : `Books of ${subject.charAt(0).toUpperCase() + subject.slice(1)}`}
+          </h2>
+          
+          {/* Adjusted MyCarousel to display books in a grid layout */}
+          <MyCarousel
+            items={booksDataBySubject[subject].map(book => renderBookItem(book))}
+          />
+        </div>
+      ))}
+  </div>
+);
+
 };
 
 export default Home;

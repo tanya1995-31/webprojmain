@@ -190,46 +190,6 @@ button {
   text-align: center;
 }
 
-.searchForm {
-  display: flex; /* Keeps the form elements inline */
-  justify-content: center; /* Center the form within its parent */
-  align-items: center; /* Center the form elements vertically */
-  margin: auto; /* Center the form horizontally */
-  gap: 0.5rem; /* Add space between the search input and button */
-  width: 100%; /* Take the full width of its container */
-  max-width: 1000px; /* Increase the max-width as needed */
-  padding: 1rem;
-}
-
-.searchForm input[type="text"] {
-  flex: 1; /* Allow input to grow and fill the available space */
-  padding: 0.5rem;
-  border-radius: 25rem;
-  outline: none;
-  border: 1px solid #ccc;
-  margin-right: 0.5rem; /* Ensure there is space between the input and the button */
-  width: 800px;
-}
-  
-.searchForm .searchButton {
-  padding: 0.5rem 1rem;
-  border-radius: 25rem;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap; /* Prevent text wrapping inside the button */
-  flex-shrink: 0; /* Prevent the button from shrinking */
-}
-  
-.searchForm .searchButton:hover {
-  background-color: #0056b3; /* Button background color on hover */
-}
-
-.searchForm label {
-  display: none; /* Hide label */
-}
-
 .welcome-message {
   margin-left: 20px;
   font-size: 1.5rem; /* Example size, adjust as needed */
