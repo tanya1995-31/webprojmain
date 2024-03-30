@@ -84,21 +84,21 @@ const renderBookItem = (book) => {
         <img src={book.coverImageUrl} alt={book.title} className="w-full h-auto md:h-80 object-cover rounded-t-lg" />
         <button
           onClick={() => addBookToFavorites(book._id)}
-          className="absolute -top-3 -right-3 transform transition duration-500 ease-in-out group-hover:-translate-y-1 group-hover:scale-110 bg-white p-2 rounded-full shadow-lg text-red-500 text-2xl"
+          className="absolute top-2 right-2 transform transition duration-500 ease-in-out group-hover:scale-110 bg-white p-2 rounded-full shadow-lg text-red-500 text-2xl"
           aria-label="Add to favorites"
         >
           <FontAwesomeIcon icon={faHeart} />
         </button>
       </div>
-      <div className="text-center mt-2">
-        <h3 className="text-lg font-semibold truncate w-full">{book.title}</h3>
-        <p className="text-sm truncate w-full">{book.author}</p>
+      <div className="text-center mt-2 w-full px-4">
+        <h3 className="text-lg font-semibold truncate">{book.title}</h3>
+        <p className="text-sm truncate">{book.author}</p>
       </div>
       <button onClick={() => ViewBooks(book._id)} className="mt-4 transition duration-300 ease-in-out text-gray-800 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50 rounded-full px-6 py-2 text-sm font-medium uppercase tracking-wider shadow-sm hover:shadow-md">
         View Book
       </button>
-    </div>
-  );
+    </div>
+  );
 };
 ;
 
