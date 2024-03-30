@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 
 // CORS options
 const corsOptions = {
-  origin: 'https://webprojmain.vercel.app', // The origin of the frontend application
+  origin: '', // The origin of the frontend application
   credentials: true, // Allows cookies to be sent
   methods:["POST","GET"],
 };
