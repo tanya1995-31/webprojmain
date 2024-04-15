@@ -37,57 +37,72 @@ router.post('/register', async (req, res) => { // Ensure endpoint is lowercase t
 // Login route
 router.post('/login', async (req, res) => {
     try {
-        console.log(req);
-        // Find the user by username
-        const user = await User.findOne({ username: req.body.username });
-        console.log(user);
-  
-        // Check if user exists
-        if (user) {
-            // Compare the provided password with the hashed password in the database
-            const isMatch = await bcrypt.compare(req.body.password, user.password);
-            
-            if (isMatch) {  
-                // Create token
-                const token = jwt.sign(
-                    { id: user._id, username: user.username },
-                    process.env.JWT_SECRET,
-                    { expiresIn: '1h' }
-                );
-                console.log("JWT_SECRET:", process.env.JWT_SECRET);
-                // Send the JWT in a cookie
-                res.cookie('token', token, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production', // true if in production
-                    maxAge: 3600000 // should match the token's expiration time
-                });
-  
-                // Respond with token
-                res.json({ message: "Login successful", username: user.username });
-            } else {
-                // Passwords do not match
-                res.status(401).json({ message: "Invalid credentials" });
-            }
-        } else {
+        const { username, password } = req.body;
+        
+        // Find the user by username and ensure to populate necessary data if needed
+        const user = await User.findOne({ username }).populate('favoriteBooks');
+        
+        if (!user) {
             // User not found
-            res.status(401).json({ message: "User does not exist" });
+            return res.status(401).json({ message: "User does not exist" });
         }
+
+        // Compare the provided password with the hashed password in the database
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            // Passwords do not match
+            return res.status(401).json({ message: "Invalid credentials" });
+        }
+
+        // Create token
+        const token = jwt.sign(
+            { id: user._id, username: user.username }, // You could add more claims here if needed
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }  // Consider adjusting based on your application's security requirements
+        );
+
+        // Prepare user data to send back
+        const userData = {
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            favoriteBooks: user.favoriteBooks.map(book => ({
+                id: book._id,
+                title: book.title,
+                author: book.author,
+                coverImageUrl: book.coverImageUrl,
+                subject: book.subject
+            })),
+            favoriteSubjects: user.favoriteSubjects  // Ensure the user model supports this attribute
+        };
+
+        // Send the JWT in a cookie with appropriate security settings
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production environment only
+            maxAge: 3600000,  // 1 hour
+            sameSite: 'strict'  // Strict sameSite policy to prevent CSRF
+        });
+
+        // Respond with user data
+        res.json({ message: "Login successful", user: userData });
     } catch (error) {
-        console.error(error);
+        console.error("Server error:", error);
         res.status(500).json({ message: "Server error" });
     }
 });
 
+
 // Logout route
 router.post('/logout', (req, res) => {
-    res.clearCookie('token');
+    res.clearCookie('token', { path: '/', httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    //res.clearCookie('token');
     res.json({ message: 'Logout successful' });
 });
 
 // Verify route
 router.get('/verify', (req, res) => {
     const token = req.cookies['token'];
-    console.log(token);
     if (!token) {
         return res.status(401).json({ isLoggedIn: false, message: "No token provided" });
     }
@@ -99,67 +114,23 @@ router.get('/verify', (req, res) => {
         res.json({ isLoggedIn: true, username: decoded.username });
     });
 });
- 
-//  GET profile
-router.get('/profile', async (req, res) => {
-    const token = req.cookies['token'];
-    if (!token) {
-        console.log('No token provided');
-        return res.status(401).json({ message: "No token, authorization denied" });
-    }
 
+// Update favorite subjects for the user
+router.put('/update-favorite-subjects', async (req, res) => {
+    const { userId, subjects } = req.body;  // Get user ID and subjects array from request body
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('Decoded token:', decoded);
-        req.user = decoded;
-
-        const userId = req.user.id;
-        const user = await User.findById(userId).populate('favoriteBooks');
-        console.log('User found:', user);
-
+        const user = await User.findById(userId);  // Find the user by ID
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).send('User not found');
         }
-
-        res.json({
-            username: user.username,
-            email: user.email,
-            favoriteBooks: user.favoriteBooks.map(book => ({
-                id: book._id,
-                title: book.title,
-                author: book.author,
-                coverImageUrl: book.coverImageUrl,
-                subject: book.subject
-            }))
-        });
-
-    } catch (e) {
-        console.log('Error fetching profile:', e.message);
-        res.status(400).json({ message: "Token is not valid" });
+        user.favoriteSubjects = subjects;  // Update the favoriteSubjects field
+        await user.save();  // Save the updated user
+        res.send('Favorite subjects updated');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
     }
 });
 
-
-// Put the favorite subjects in the DB
-router.put('/profile/favoritesubjects', async (req, res) => {
-    const token = req.cookies['token'];
-    if (!token) {
-        return res.status(401).json({ message: "No token, authorization denied" });
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id;
-        const { favoriteSubjects } = req.body;
-
-        await User.findByIdAndUpdate(userId, {
-            $set: { favoriteSubjects: favoriteSubjects }
-        });
-
-        res.json({ message: 'Favorite subjects updated successfully' });
-    } catch (e) {
-        res.status(400).json({ message: "An error occurred while updating favorite subjects" });
-    }
-});
 
 module.exports = router;

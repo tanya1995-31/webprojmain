@@ -1,45 +1,48 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
-const AuthContext = createContext({});
+const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState({});
+    const [auth, setAuth] = useState(null);
 
-    // Check login status
+    useEffect(() => {
+        checkLoginStatus();
+    }, []);
+
     const checkLoginStatus = async () => {
+        console.log("Checking login status...");
         try {
-            const response = await fetch('/api/verify', { method: 'GET', credentials: 'include' });
+            const response = await fetch('/api/verify', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP status ${response.status}`);
+            }
             const data = await response.json();
-            const { isLoggedIn, username } = data;
-            if (isLoggedIn) {
-                setAuth({ user: username });
+            if (data.isLoggedIn) {
+                setAuth(data.user);  // Ensure this is the user object as expected elsewhere
             } else {
-                setAuth({});
+                setAuth(null);
             }
         } catch (error) {
-            // Silent handling of unauthorized errors, updating state to reflect not logged in.
-            if (error.response?.status === 401) {
-                setAuth({});
-            } else {
-                // Log other errors for debugging purposes.
-                console.error('Unexpected error during auth verification:', error);
-            }
+            console.error('Error during auth verification:', error);
+            setAuth(null);
         }
     };
 
-    // Logout function that also tells the server to clear the cookie
     const logout = async () => {
         try {
-          // Make a POST request to the server to log the user out
-          await fetch('/api/logout', { method: 'POST', credentials: 'include' });
-          // Clear the authentication state
-          setAuth({});
+            await fetch('/api/logout', { 
+                method: 'POST', 
+                credentials: 'include' 
+            });
+            setAuth(null);
         } catch (error) {
-          console.error('Logout failed:', error);
+            console.error('Logout failed:', error);
         }
-        await checkLoginStatus();
     };
     
     return (
@@ -48,8 +51,5 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-
-
-
 
 export default AuthContext;

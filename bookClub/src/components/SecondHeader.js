@@ -4,7 +4,7 @@ import AuthContext from '../context/AuthProvider';
 
 const SecondHeader = ({isDarkMode}) => {
   const { auth, logout } = useContext(AuthContext);
-  const isLoggedIn = !!auth?.user; // Check if the user object is present to confirm login
+  const isLoggedIn = !!auth; 
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -16,15 +16,21 @@ const SecondHeader = ({isDarkMode}) => {
     navigate('/profile'); // Redirect to home after logout
   };
 
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return ''; // Return an empty string if not provided
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   return (
     <div className={`flex justify-start items-center py-3 ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+      <Link to="/" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">Home</Link>
       <Link to="/about" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">About</Link>
       <Link to="/contactus" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">Contact Us</Link>
       {isLoggedIn ? (
         <>
           <button onClick={handleLogout} className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors">Log Out</button>
           <button onClick={handleProfile} className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors">Profile</button>
-          <span className="mr-4 text-sm font-semibold">Welcome, {auth.user}</span>
+        <span className="mr-4 text-sm font-semibold">Welcome, {capitalizeFirstLetter(auth.username)}</span>
         </>
       ) : (
         <>

@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import AuthContext from "../context/AuthProvider";
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
+import SecondHeader from './SecondHeader';
 const LOGIN_URL = 'http://localhost:5000/api/login';
 
 const Login = ({ isDarkMode }) => {
@@ -30,17 +31,15 @@ const Login = ({ isDarkMode }) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ username: user, password: pwd })
+                body: JSON.stringify({ username:user, password:pwd })
             });
             if (!response.ok) {
                 throw new Error('Login Failed');
             }
-            const data = await response.json();
-            setAuth({ user: data.username });
-            setUser('');
-            setPwd('');
-            setSuccess(true);
-            navigate('/');
+            
+            const { user: userData } = await response.json();
+            setAuth(userData);
+            navigate('/'); // Redirect to home after successful login
         } catch (err) {
             setErrMsg('Login Failed');
             errRef.current.focus();
@@ -54,57 +53,61 @@ const Login = ({ isDarkMode }) => {
 
 
     return (
-        <div className={`min-h-screen flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-            <Header header="Sign In" isDarkMode={isDarkMode} />    
-            <section className={`${formSectionStyle} w-full max-w-md`} style={{ minHeight: '50vh' }}>
-                {success ? (
-                    <div className={`text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                        <h1 className="text-xl">You are logged in!</h1>
-                        <p>
-                            <a href="/" className="text-blue-500 hover:text-blue-700">Go to Home</a>
-                        </p>
-                    </div>
-                ) : (
-                    <>
-                        <p ref={errRef} className={`mb-4 text-center text-sm ${errMsg ? (isDarkMode ? 'text-red-300' : 'text-red-700') : 'invisible'}`} aria-live="assertive">{errMsg}</p>
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <label htmlFor="username" className={labelStyle}>Username:</label>
-                                <input 
-                                    type="text"
-                                    id="username"
-                                    ref={userRef}
-                                    autoComplete="off"
-                                    onChange={(e) => setUser(e.target.value)}
-                                    value={user}
-                                    required
-                                    className={inputStyle}
-                                />
-                            </div>     
-                            <div>
-                                <label htmlFor="password" className={labelStyle}>Password:</label>
-                                <input 
-                                    type="password"
-                                    id="password"
-                                    onChange={(e) => setPwd(e.target.value)}
-                                    value={pwd}
-                                    required
-                                    className={inputStyle}
-                                />
-                            </div>    
-                            <div>
-                                <button type="submit" className={buttonStyle}>Sign In</button>
-                            </div>
-                            <div className="text-center">
-                                <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                                    Need an Account?
-                                    <a href="/signup" className="text-blue-500 hover:text-blue-700"> Sign Up</a>
-                                </p>
-                            </div>
-                        </form>
-                    </>
-                )}
-            </section>
+        <div>
+            <Header header="Sign In" isDarkMode={isDarkMode} />   
+            <SecondHeader isDarkMode={isDarkMode} />
+            <div className={`min-h-screen flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+               
+                <section className={`${formSectionStyle} w-full max-w-md`} style={{ minHeight: '50vh' }}>
+                    {success ? (
+                        <div className={`text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                            <h1 className="text-xl">You are logged in!</h1>
+                            <p>
+                                <a href="/" className="text-blue-500 hover:text-blue-700">Go to Home</a>
+                            </p>
+                        </div>
+                    ) : (
+                        <>
+                            <p ref={errRef} className={`mb-4 text-center text-sm ${errMsg ? (isDarkMode ? 'text-red-300' : 'text-red-700') : 'invisible'}`} aria-live="assertive">{errMsg}</p>
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                <div>
+                                    <label htmlFor="username" className={labelStyle}>Username:</label>
+                                    <input 
+                                        type="text"
+                                        id="username"
+                                        ref={userRef}
+                                        autoComplete="off"
+                                        onChange={(e) => setUser(e.target.value)}
+                                        value={user}
+                                        required
+                                        className={inputStyle}
+                                    />
+                                </div>     
+                                <div>
+                                    <label htmlFor="password" className={labelStyle}>Password:</label>
+                                    <input 
+                                        type="password"
+                                        id="password"
+                                        onChange={(e) => setPwd(e.target.value)}
+                                        value={pwd}
+                                        required
+                                        className={inputStyle}
+                                    />
+                                </div>    
+                                <div>
+                                    <button type="submit" className={buttonStyle}>Sign In</button>
+                                </div>
+                                <div className="text-center">
+                                    <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                        Need an Account?
+                                        <a href="/signup" className="text-blue-500 hover:text-blue-700"> Sign Up</a>
+                                    </p>
+                                </div>
+                            </form>
+                        </>
+                    )}
+                </section>
+            </div>
         </div>
     );
 };

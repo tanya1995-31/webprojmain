@@ -4,14 +4,13 @@
     import { Link, useNavigate } from 'react-router-dom';
     import Header from './Header';
     import AuthContext from "../context/AuthProvider"; // Assuming usage for demonstration
-
+    import SecondHeader from "./SecondHeader";
     const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
     const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
     const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const REGISTER_URL = 'http://localhost:5000/api/register';
 
     const Register = ({ isDarkMode }) => {
-        const navigate = useNavigate();
         const { setAuth } = useContext(AuthContext); // Placeholder for context use
         const userRef = useRef();
         const errRef = useRef();
@@ -114,134 +113,137 @@
     const successLinkStyle = `text-blue-500 hover:text-blue-700 dark:hover:text-blue-400`;  
 
     return (
-        <div className={`min-h-screen flex flex-col items-center justify-center ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
-            <Header header="Sign Up" isDarkMode={isDarkMode} />
-            {success ? (
-                <section className={`${successStyle}`}>
-                    <h1 className={`${successTitleStyle}`}>Success!</h1>
-                    <p className={`${successMessageStyle}`}>
-                        You have successfully registered. Please sign in to continue.
-                    </p>
-                    <Link to="/signin" className={`${successLinkStyle}`}>Sign In</Link>
-                </section>
-            ) : (
-                <section className={formSectionStyle}>
-                    <p ref={errRef} className={`mb-4 text-center text-sm ${errMsg ? (isDarkMode ? "text-red-300" : "text-red-700") : "invisible"}`} aria-live="assertive">{errMsg}</p>
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Username field */}
-                        <div className="space-y-2">
-                            <div className={labelIconContainerStyle}>
-                                <label htmlFor="username" className={`${labelStyle} flex-grow`}>Username:</label>
-                                <FontAwesomeIcon icon={faCheck} className={`${validName ? "text-green-500" : "hidden"}`} />
-                                <FontAwesomeIcon icon={faTimes} className={`${user && !validName ? "text-red-500" : "hidden"}`} />
-                            </div>
-                            <input
-                                type="text"
-                                id="username"
-                                ref={userRef}
-                                autoComplete="off"
-                                onChange={(e) => setUser(e.target.value)}
-                                value={user}
-                                required
-                                aria-invalid={!validName}
-                                aria-describedby="uidnote"
-                                onFocus={() => setUserFocus(true)}
-                                onBlur={() => setUserFocus(false)}
-                                className={`${inputStyle} ${user && !validName ? "border-red-500" : ""}`}
-                            />
-                            <p id="uidnote" className={`${userFocus && user && !validName ? "block" : "hidden"} ${noteStyle}`}>
-                                <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600" />
-                                4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.
-                            </p>
-                        </div>
-
-                        {/* Password field */}
-                        <div className="space-y-2">
-                            <div className={labelIconContainerStyle}>
-                                <label htmlFor="password" className={`${labelStyle} flex-grow`}>Password:</label>
-                                <FontAwesomeIcon icon={faCheck} className={`${validPwd && pwd ? "text-green-500" : "hidden"}`} />
-                                <FontAwesomeIcon icon={faTimes} className={`${pwd && !validPwd ? "text-red-500" : "hidden"}`} />
-                            </div>
-                            <input
-                                type="password"
-                                id="password"
-                                onChange={(e) => setPwd(e.target.value)}
-                                onFocus={() => setPwdFocus(true)}
-                                onBlur={() => setPwdFocus(false)}
-                                value={pwd}
-                                required
-                                className={`${inputStyle} ${!validPwd && pwd ? "border-red-500" : ""}`}
-                                aria-invalid={!validPwd}
-                            />
-                            <p id='pwdnote' className={`${pwdFocus && !validPwd ? "block" : "hidden"} ${noteStyle}`}>
-                                <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600" />
-                                8 to 24 characters. Must include uppercase and lowercase letters, a number, and a special character. Allowed special characters: ! @ # $ %
-                            </p>
-                        </div>
-
-                        {/* Confirm Password field */}
-                        <div className="space-y-2">
-                            <div className={labelIconContainerStyle}>
-                                <label htmlFor="confirm_pwd" className={`${labelStyle} flex-grow`}>Confirm Password:</label>
-                                <FontAwesomeIcon icon={faCheck} className={`${validMatch && matchPwd ? "text-green-500" : "hidden"}`} />
-                                <FontAwesomeIcon icon={faTimes} className={`${matchPwd && !validMatch ? "text-red-500" : "hidden"}`} />
-                            </div>
-                            <input
-                                type="password"
-                                id="confirm_pwd"
-                                onChange={(e) => setMatchPwd(e.target.value)}
-                                onFocus={() => setMatchFocus(true)}
-                                onBlur={() => setMatchFocus(false)}
-                                value={matchPwd}
-                                required
-                                className={`${inputStyle} ${matchPwd && !validMatch ? "border-red-500" : ""}`}
-                                aria-invalid={!validMatch ? "true" : "false"}
-                            />
-                            <p id="confirmnote" className={`${matchFocus && !validMatch ? "block" : "hidden"} ${noteStyle}`}>
-                                <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600" />
-                                Must match the first password input field.
-                            </p>
-                            </div>
-
-
-                        {/* Email field */}
-                        <div className="space-y-2">
-                        <div className={labelIconContainerStyle}>
-                            <label htmlFor="email" className={`${labelStyle} flex-grow`}>Email:</label>
-                            <FontAwesomeIcon icon={faCheck} className={`${validEmail && email ? "text-green-500" : "hidden"}`} />
-                            <FontAwesomeIcon icon={faTimes} className={`${email && !validEmail ? "text-red-500" : "hidden"}`} />
-                        </div>
-                        <input
-                            type="email"
-                            id="email"
-                            onChange={(e) => setEmail(e.target.value)}
-                            onFocus={() => setEmailFocus(true)}
-                            onBlur={() => setEmailFocus(false)}
-                            value={email}
-                            required
-                            className={`${inputStyle} ${email && !validEmail ? "border-red-500" : ""}`}
-                            aria-invalid={!validEmail ? "true" : "false"}
-                        />
-                        <p id="emailnote" className={`${emailFocus && !validEmail ? "block" : "hidden"} ${noteStyle}`}>
-                            <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600" />
-                            Must be a valid email address.
+        <div>
+            <Header header="Sign Up" isDarkMode={isDarkMode} />   
+            <SecondHeader isDarkMode={isDarkMode} />
+            <div className={`min-h-screen flex flex-col items-center justify-center ${isDarkMode ? "bg-gray-800" : "bg-gray-100"}`}>
+                {success ? (
+                    <section className={`${successStyle}`}>
+                        <h1 className={`${successTitleStyle}`}>Success!</h1>
+                        <p className={`${successMessageStyle}`}>
+                            You have successfully registered. Please sign in to continue.
                         </p>
-                        </div>
+                        <Link to="/signin" className={`${successLinkStyle}`}>Sign In</Link>
+                    </section>
+                ) : (
+                    <section className={formSectionStyle}>
+                        <p ref={errRef} className={`mb-4 text-center text-sm ${errMsg ? (isDarkMode ? "text-red-300" : "text-red-700") : "invisible"}`} aria-live="assertive">{errMsg}</p>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Username field */}
+                            <div className="space-y-2">
+                                <div className={labelIconContainerStyle}>
+                                    <label htmlFor="username" className={`${labelStyle} flex-grow`}>Username:</label>
+                                    <FontAwesomeIcon icon={faCheck} className={`${validName ? "text-green-500" : "hidden"}`} />
+                                    <FontAwesomeIcon icon={faTimes} className={`${user && !validName ? "text-red-500" : "hidden"}`} />
+                                </div>
+                                <input
+                                    type="text"
+                                    id="username"
+                                    ref={userRef}
+                                    autoComplete="off"
+                                    onChange={(e) => setUser(e.target.value)}
+                                    value={user}
+                                    required
+                                    aria-invalid={!validName}
+                                    aria-describedby="uidnote"
+                                    onFocus={() => setUserFocus(true)}
+                                    onBlur={() => setUserFocus(false)}
+                                    className={`${inputStyle} ${user && !validName ? "border-red-500" : ""}`}
+                                />
+                                <p id="uidnote" className={`${userFocus && user && !validName ? "block" : "hidden"} ${noteStyle}`}>
+                                    <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600" />
+                                    4 to 24 characters. Must begin with a letter. Letters, numbers, underscores, hyphens allowed.
+                                </p>
+                            </div>
+
+                            {/* Password field */}
+                            <div className="space-y-2">
+                                <div className={labelIconContainerStyle}>
+                                    <label htmlFor="password" className={`${labelStyle} flex-grow`}>Password:</label>
+                                    <FontAwesomeIcon icon={faCheck} className={`${validPwd && pwd ? "text-green-500" : "hidden"}`} />
+                                    <FontAwesomeIcon icon={faTimes} className={`${pwd && !validPwd ? "text-red-500" : "hidden"}`} />
+                                </div>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    onChange={(e) => setPwd(e.target.value)}
+                                    onFocus={() => setPwdFocus(true)}
+                                    onBlur={() => setPwdFocus(false)}
+                                    value={pwd}
+                                    required
+                                    className={`${inputStyle} ${!validPwd && pwd ? "border-red-500" : ""}`}
+                                    aria-invalid={!validPwd}
+                                />
+                                <p id='pwdnote' className={`${pwdFocus && !validPwd ? "block" : "hidden"} ${noteStyle}`}>
+                                    <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600" />
+                                    8 to 24 characters. Must include uppercase and lowercase letters, a number, and a special character. Allowed special characters: ! @ # $ %
+                                </p>
+                            </div>
+
+                            {/* Confirm Password field */}
+                            <div className="space-y-2">
+                                <div className={labelIconContainerStyle}>
+                                    <label htmlFor="confirm_pwd" className={`${labelStyle} flex-grow`}>Confirm Password:</label>
+                                    <FontAwesomeIcon icon={faCheck} className={`${validMatch && matchPwd ? "text-green-500" : "hidden"}`} />
+                                    <FontAwesomeIcon icon={faTimes} className={`${matchPwd && !validMatch ? "text-red-500" : "hidden"}`} />
+                                </div>
+                                <input
+                                    type="password"
+                                    id="confirm_pwd"
+                                    onChange={(e) => setMatchPwd(e.target.value)}
+                                    onFocus={() => setMatchFocus(true)}
+                                    onBlur={() => setMatchFocus(false)}
+                                    value={matchPwd}
+                                    required
+                                    className={`${inputStyle} ${matchPwd && !validMatch ? "border-red-500" : ""}`}
+                                    aria-invalid={!validMatch ? "true" : "false"}
+                                />
+                                <p id="confirmnote" className={`${matchFocus && !validMatch ? "block" : "hidden"} ${noteStyle}`}>
+                                    <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600" />
+                                    Must match the first password input field.
+                                </p>
+                                </div>
 
 
-                        {/* Submit button */}
-                        <button type="submit" className={buttonStyle} disabled={!validName || !validPwd || !validMatch || !validEmail}>
-                            Sign Up
-                        </button>
+                            {/* Email field */}
+                            <div className="space-y-2">
+                            <div className={labelIconContainerStyle}>
+                                <label htmlFor="email" className={`${labelStyle} flex-grow`}>Email:</label>
+                                <FontAwesomeIcon icon={faCheck} className={`${validEmail && email ? "text-green-500" : "hidden"}`} />
+                                <FontAwesomeIcon icon={faTimes} className={`${email && !validEmail ? "text-red-500" : "hidden"}`} />
+                            </div>
+                            <input
+                                type="email"
+                                id="email"
+                                onChange={(e) => setEmail(e.target.value)}
+                                onFocus={() => setEmailFocus(true)}
+                                onBlur={() => setEmailFocus(false)}
+                                value={email}
+                                required
+                                className={`${inputStyle} ${email && !validEmail ? "border-red-500" : ""}`}
+                                aria-invalid={!validEmail ? "true" : "false"}
+                            />
+                            <p id="emailnote" className={`${emailFocus && !validEmail ? "block" : "hidden"} ${noteStyle}`}>
+                                <FontAwesomeIcon icon={faInfoCircle} className="text-blue-600" />
+                                Must be a valid email address.
+                            </p>
+                            </div>
 
-                        {/* Sign in link */}
-                        <p className={`text-sm text-center ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                            Already Registered?<br />
-                            <Link to="/signin" className="text-blue-500 hover:text-blue-700">Sign In</Link>
-                        </p>
-                    </form>
-                </section>
-            )}
+
+                            {/* Submit button */}
+                            <button type="submit" className={buttonStyle} disabled={!validName || !validPwd || !validMatch || !validEmail}>
+                                Sign Up
+                            </button>
+
+                            {/* Sign in link */}
+                            <p className={`text-sm text-center ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                Already Registered?<br />
+                                <Link to="/signin" className="text-blue-500 hover:text-blue-700">Sign In</Link>
+                            </p>
+                        </form>
+                    </section>
+                )}
+            </div>
         </div>
     );
     };

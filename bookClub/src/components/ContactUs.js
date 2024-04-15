@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from './Header';
-
+import SecondHeader from './SecondHeader';
 const ContactUs = ({isDarkMode}) => {
   const members = [
     { id: 1, name: "Ran Polac", email: "ranpolac@gmail.com" },
@@ -45,45 +45,49 @@ const ContactUs = ({isDarkMode}) => {
   const buttonStyle = `w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300`;
 
   return (
-    <div className={`min-h-screen flex flex-col justify-center items-center py-12`}>
+    <div>
       <Header header='Contact Us' isDarkMode={isDarkMode}/>
-      <section className="w-full max-w-2xl px-6">
-        <div className="space-y-4">
-          {members.map((member) => (
-            <div key={member.id} className={`${memberContainerStyle} flex justify-between items-center`}>
-              <p className={memberTextStyle}>{member.name}</p>
-              <p className={memberEmailStyle}>{member.email}</p>
-            </div>
-          ))}
-        </div>
-        {isSubmitted && (
-          <div className={`bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-6 ${isDarkMode ? 'dark:bg-green-700 dark:border-green-900 dark:text-green-200' : ''}`} role="alert">
-            Thank you for your message!
+      <SecondHeader isDarkMode={isDarkMode}/>
+      <div className={`min-h-screen flex flex-col justify-center items-center py-12`}>
+        
+        <section className="w-full max-w-2xl px-6">
+          <div className="space-y-4">
+            {members.map((member) => (
+              <div key={member.id} className={`${memberContainerStyle} flex justify-between items-center`}>
+                <p className={memberTextStyle}>{member.name}</p>
+                <p className={memberEmailStyle}>{member.email}</p>
+              </div>
+            ))}
           </div>
-        )}
-        <form onSubmit={handleSubmit} className={`mt-6 p-8 rounded-lg shadow-md border ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}>
-          <label htmlFor="userName" className={memberTextStyle}>Your Name:</label>
-          <input
-            type="text"
-            id="userName"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            placeholder="Your name..."
-            className={inputStyle}
-          />
-          <label htmlFor="message" className={memberTextStyle}>Message:</label>
-          <textarea
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Write your message here..."
-            className={inputStyle}
-          ></textarea>
-          <button type="submit" className={buttonStyle}>
-            Submit
-          </button>
-        </form>
-      </section>
+          {isSubmitted && (
+            <div className={`bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-6 ${isDarkMode ? 'dark:bg-green-700 dark:border-green-900 dark:text-green-200' : ''}`} role="alert">
+              Thank you for your message!
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className={`mt-6 p-8 rounded-lg shadow-md border ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}>
+            <label htmlFor="userName" className={memberTextStyle}>Your Name:</label>
+            <input
+              type="text"
+              id="userName"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="Your name..."
+              className={inputStyle}
+            />
+            <label htmlFor="message" className={memberTextStyle}>Message:</label>
+            <textarea
+              id="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Write your message here..."
+              className={inputStyle}
+            ></textarea>
+            <button type="submit" className={buttonStyle}>
+              Submit
+            </button>
+          </form>
+        </section>
+      </div>
     </div>
   );
 };
