@@ -4,13 +4,12 @@ import RanP from '../images/RanP.jpg';
 import Omri from '../images/Omri.jpg';
 import Tanya from '../images/Tanya.jpg';
 import Almog from '../images/Almog.jpg';
-import SecondHeader from './SecondHeader';
 
 const About = ({ isDarkMode }) => {
   return (
-    <div isDarkMode={isDarkMode}>
+    
+    <div>
       <Header header='About Us' isDarkMode={isDarkMode}/>
-      <SecondHeader isDarkMode={isDarkMode}/>
       <div className="min-h-screen flex flex-col text-center justify-center items-center py-12" >
         <p className={`mt-2 text-lg mx-auto leading-relaxed max-w-2xl ${isDarkMode ? 'text-white' : 'text-gray-700 '}`}>
         It all started with a simple idea: what if there was a cozy corner on the internet just for book lovers? We imagined a place where people could gather to chat about their favorite books, share reviews, and discover new reads. That's how our site came to life—a straightforward spot for readers to connect and share their passion for books.

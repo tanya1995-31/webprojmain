@@ -47,7 +47,6 @@ const ContactUs = ({isDarkMode}) => {
   return (
     <div>
       <Header header='Contact Us' isDarkMode={isDarkMode}/>
-      <SecondHeader isDarkMode={isDarkMode}/>
       <div className={`min-h-screen flex flex-col justify-center items-center py-12`}>
         
         <section className="w-full max-w-2xl px-6">

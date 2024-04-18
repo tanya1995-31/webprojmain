@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./routes/authRoutes');
 const bookRoutes = require('./routes/bookRoutes');
@@ -15,6 +16,8 @@ const corsOptions = {
   origin: 'http://localhost:3000', // The origin of the frontend application
   credentials: true, // Allows cookies to be sent
 };
+
+app.use(cookieParser());
 
 // Apply CORS before other routes
 app.use(cors(corsOptions));

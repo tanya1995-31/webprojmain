@@ -22,7 +22,7 @@ const SecondHeader = ({isDarkMode}) => {
   };
 
   return (
-    <div className={`flex justify-start items-center py-3 ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+    <div className={`flex justify-start items-center py-3 ${isDarkMode ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}>
       <Link to="/" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">Home</Link>
       <Link to="/about" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">About</Link>
       <Link to="/contactus" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">Contact Us</Link>

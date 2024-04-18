@@ -9,7 +9,7 @@ import ViewBook from './components/ViewBook';
 import About from './components/About';
 import DarkSide from './components/DarkSide'; 
 import Profile from './components/Profile';
-
+import SecondHeader from './components/SecondHeader';
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -21,16 +21,17 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-              <Routes>
-                <Route exact path="/" element={<Home isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />} />
-                <Route path="/signup" element={<Register isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>} />
-                <Route path="/signin" element={<Login isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />} />
-                <Route path="/about" element={<About isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>} />
-                <Route path="/contactus" element={<ContactUs isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>} />
-                <Route path="/profile" element={<Profile isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />} /> 
-                <Route path="/books/:id" element={<ViewBook isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>} />
-              </Routes>
+        <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+        <SecondHeader isDarkMode={isDarkMode} />
+          <Routes>
+            <Route exact path="/" element={<Home isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />} />
+            <Route path="/signup" element={<Register isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>} />
+            <Route path="/signin" element={<Login isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />} />
+            <Route path="/about" element={<About isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>} />
+            <Route path="/contactus" element={<ContactUs isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>} />
+            <Route path="/profile" element={<Profile isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />} /> 
+            <Route path="/books/:id" element={<ViewBook isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode}/>} />
+          </Routes>
           <div className="bg-gray-200 dark:bg-gray-900 text-black dark:text-white">
             <DarkSide toggleDarkMode={toggleDarkMode} /> {/* Include the DarkSide component */}
           </div>

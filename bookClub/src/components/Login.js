@@ -3,6 +3,8 @@ import AuthContext from "../context/AuthProvider";
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import SecondHeader from './SecondHeader';
+import Cookies from 'js-cookie';
+
 const LOGIN_URL = 'http://localhost:5000/api/login';
 
 const Login = ({ isDarkMode }) => {
@@ -31,14 +33,18 @@ const Login = ({ isDarkMode }) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ username:user, password:pwd })
+                body: JSON.stringify({ username: user, password: pwd })
             });
+    
             if (!response.ok) {
                 throw new Error('Login Failed');
             }
             
             const { user: userData } = await response.json();
+            // After successful login, set cookies and auth state
             setAuth(userData);
+            Cookies.set('isLoggedIn', 'true', { expires: 1 }); // Expires in 1 day
+            Cookies.set('username', userData.username, { expires: 1 }); // Expires in 1 day
             navigate('/'); // Redirect to home after successful login
         } catch (err) {
             setErrMsg('Login Failed');
@@ -55,7 +61,6 @@ const Login = ({ isDarkMode }) => {
     return (
         <div>
             <Header header="Sign In" isDarkMode={isDarkMode} />   
-            <SecondHeader isDarkMode={isDarkMode} />
             <div className={`min-h-screen flex flex-col items-center justify-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                
                 <section className={`${formSectionStyle} w-full max-w-md`} style={{ minHeight: '50vh' }}>

@@ -56,9 +56,9 @@ router.post('/login', async (req, res) => {
 
         // Create token
         const token = jwt.sign(
-            { id: user._id, username: user.username }, // You could add more claims here if needed
+            { id: user._id, username: user.username }, 
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }  // Consider adjusting based on your application's security requirements
+            { expiresIn: '1h' }  
         );
 
         // Prepare user data to send back
@@ -95,42 +95,141 @@ router.post('/login', async (req, res) => {
 
 // Logout route
 router.post('/logout', (req, res) => {
-    res.clearCookie('token', { path: '/', httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-    //res.clearCookie('token');
+    res.clearCookie('token', {
+         path: '/', httpOnly: true, 
+         secure: process.env.NODE_ENV === 'production' 
+    });
     res.json({ message: 'Logout successful' });
 });
 
-// Verify route
-router.get('/verify', (req, res) => {
+router.get('/verify', async (req, res) => {
+    try {
+        // Retrieve the token from the HTTP-only cookie
+        const token = req.cookies['token'];
+        if (!token) {
+            return res.status(401).json({ isLoggedIn: false, user: null });
+        }
+
+        // Verify the token
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+            if (err) {
+                return res.status(401).json({ isLoggedIn: false, user: null });
+            }
+            // If token is verified, find the user in the database
+            const user = await User.findById(decodedToken.id)
+                .select('-password') // Exclude password
+                .populate('favoriteBooks') // Populate favorite books if they are references to another collection
+                .exec(); // Execute the query
+
+            if (!user) {
+                return res.status(401).json({ isLoggedIn: false, user: null });
+            }
+
+            // Respond with the user's information if everything is valid
+            res.json({ 
+                isLoggedIn: true, 
+                user: { 
+                    username: user.username, 
+                    email: user.email, 
+                    id: user._id,
+                    favoriteSubjects: user.favoriteSubjects, // Include favorite subjects
+                    favoriteBooks: user.favoriteBooks, // Include populated favorite books
+                } 
+            });        
+        });
+    } catch (error) {
+        res.status(500).json({ isLoggedIn: false, user: null, message: 'Internal server error.' });
+    }
+});
+
+// Middleware to validate the token from cookies
+function validateToken(req, res, next) {
     const token = req.cookies['token'];
     if (!token) {
-        return res.status(401).json({ isLoggedIn: false, message: "No token provided" });
+        console.error("No token provided");
+        return res.status(401).json({ message: "Authorization denied, no token" });
     }
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            console.error('Token verification error:', err);
-            return res.status(401).json({ isLoggedIn: false, message: "Token verification failed" });
-        }
-        res.json({ isLoggedIn: true, username: decoded.username });
-    });
-});
-
-// Update favorite subjects for the user
-router.put('/update-favorite-subjects', async (req, res) => {
-    const { userId, subjects } = req.body;  // Get user ID and subjects array from request body
     try {
-        const user = await User.findById(userId);  // Find the user by ID
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.userId = decoded.id;
+        next();
+    } catch (e) {
+        console.error("Token validation failed:", e);
+        res.status(401).json({ message: "Token is not valid" });
+    }
+}
+
+// Update the favorite subjects of the user
+router.put('/update-favorite-subjects', validateToken, async (req, res) => {
+    const { subjects } = req.body;
+    const userId = req.userId; // Get the user ID from the request after token validation
+
+    try {
+        const user = await User.findById(userId);
         if (!user) {
-            return res.status(404).send('User not found');
+            return res.status(404).json({ message: 'User not found' });
         }
-        user.favoriteSubjects = subjects;  // Update the favoriteSubjects field
-        await user.save();  // Save the updated user
-        res.send('Favorite subjects updated');
+
+        user.favoriteSubjects = subjects;
+        await user.save();
+
+        res.json({
+            message: 'Favorite subjects updated successfully',
+            favoriteSubjects: user.favoriteSubjects
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error', error: error.toString() });
     }
 });
 
+
+router.put('/update-favorite-books', validateToken, async (req, res) => {
+    try {
+        console.log('Received request:', req.body);
+        const { userId, bookId } = req.body;
+
+        console.log('Parsed userId and bookId:', userId, bookId);
+
+        // Perform the update operation
+        const result = await User.updateOne(
+            { _id: userId },
+            { $addToSet: { favoriteBooks: bookId } }
+        );
+
+        console.log('Update result:', result);
+
+        // Check if the operation was successful
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (result.modifiedCount === 0) {
+            return res.status(200).json({ message: 'Book was already in favorites' });
+        }
+
+        // If successful, return a success message
+        res.json({ message: 'Book added to favorites successfully' });
+    } catch (error) {
+        console.error('Error updating favorite books:', error);
+        res.status(500).json({ message: 'Error updating favorite books', error: error.toString() });
+    }
+});
+
+// Remove book from favorites list
+router.delete('/remove-favorite-book/:bookId', validateToken, async (req, res) => {
+    const { userId } = req.body;
+    const { bookId } = req.params;
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      user.favoriteBooks = user.favoriteBooks.filter(book => book.toString() !== bookId);
+      await user.save();
+      res.status(200).json({ message: "Book removed from favorites" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to remove book from favorites", error: error.toString() });
+    }
+  });
 
 module.exports = router;
