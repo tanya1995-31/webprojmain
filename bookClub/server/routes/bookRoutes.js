@@ -42,6 +42,7 @@ fetchAndStoreBooks();
 //******************************* */
 // Fetch a single book by ID from MongoDB
 router.get('/books/:id', async (req, res) => {
+  console.log(req.body);
   try {
     const book = await Book.findById(req.params.id);
     if (!book) {
@@ -148,20 +149,7 @@ router.get('/search-books', async (req, res) => {
   }
 });
 
-//******************************* */
-// Fetch a single book by ID from MongoDB
-router.get('/books/:id', async (req, res) => {
-  try {
-    const book = await Book.findById(req.params.id);
-    if (!book) {
-      return res.status(404).json({ message: 'Book not found' });
-    }
-    res.status(200).json(book);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to get book', error: error.message });
-  }
-});
+
 
 // Add a comment to a book
 router.post('/books/:id/comments', async (req, res) => {

@@ -2,7 +2,6 @@
   import { useNavigate } from 'react-router-dom';
   import MyCarousel from './MyCarousel';
   import Header from './Header';
-  import SecondHeader from './SecondHeader';
   import SearchBar from './SearchBar';
   import { faHeart } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,7 +22,6 @@
     const { auth } = useContext(AuthContext);
 
     useEffect(() => {
-      console.log("Auth state on mount:", auth);
       subjects.forEach(subject => fetchBooksAndStoreData(subject));
     }, [auth]);
   
@@ -80,6 +78,7 @@
     };
 
     const addBookToFavorites = async (bookId) => {
+      console.log('check: ', auth._id);
       if (!auth || !auth._id) {
         console.error('User ID is missing or user is not logged in');
         return;

@@ -1,31 +1,26 @@
 import React, { createContext, useState, useEffect } from "react";
-import Cookies from 'js-cookie';
 
 const AuthContext = createContext(null);
 
-export const useAuth = () => React.useContext(AuthContext);
-
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState(() => {
-        const storedAuth = localStorage.getItem('auth');
-        return storedAuth ? JSON.parse(storedAuth) : null;
-    });
+    const [auth, setAuth] = useState(null);
 
     useEffect(() => {
         checkLoginStatus();
+        console.log("check check checks");
     }, []);
 
     const checkLoginStatus = async () => {
         try {
             const response = await fetch('/api/verify', {
                 method: 'GET',
-                credentials: 'include' // This sends any HTTP-only cookies back to the server
+                credentials: 'include' 
             });
-    
+
             if (!response.ok) {
                 throw new Error('Not logged in');
             }
-    
+
             const data = await response.json();
             if (data.isLoggedIn) {
                 setAuth(data.user);
@@ -37,32 +32,25 @@ export const AuthProvider = ({ children }) => {
             setAuth(null);
         }
     };
-    
-    // Function to update favorite books in the global context
+
     const updateFavoriteBooks = (newFavoriteBooks) => {
-        if (auth) {
-            setAuth({...auth,favoriteBooks: newFavoriteBooks});
-        }
+        setAuth(auth => ({ ...auth, favoriteBooks: newFavoriteBooks }));
     };
 
     const logout = async () => {
         try {
-            await fetch('/api/logout', { 
-                method: 'POST', 
-                credentials: 'include' 
+            const response = await fetch('/api/logout', {
+                method: 'POST',
+                credentials: 'include'
             });
-            setAuth(null);
-            localStorage.removeItem('auth'); // Remove auth from local storage
-            Cookies.remove('isLoggedIn'); // Remove isLoggedIn cookie
-            Cookies.remove('username'); // Remove username cookie
+
+            if (response.ok) {
+                setAuth(null);
+            }
         } catch (error) {
             console.error('Logout failed:', error);
         }
     };
-    
-    useEffect(() => {
-        localStorage.setItem('auth', JSON.stringify(auth));
-    }, [auth]);
 
     return (
         <AuthContext.Provider value={{ auth, setAuth, logout, checkLoginStatus, updateFavoriteBooks }}>

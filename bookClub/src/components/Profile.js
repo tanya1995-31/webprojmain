@@ -36,7 +36,7 @@ const Profile = ({ isDarkMode }) => {
     if (auth?.favoriteSubjects) {
       setFavoriteSubjects(auth.favoriteSubjects);
     }
-  }, [auth]); // We re-run this effect if the `auth` object changes
+  }, [auth]); 
   
 
   const handleSubjectChange = (selectedOptions) => {
@@ -66,24 +66,31 @@ const Profile = ({ isDarkMode }) => {
     }
   };
 
-  const removeBookFromFavorites = async (bookId) => {
+  const removeBookFromFavorites = async (e, bookId) => {
+    e.preventDefault();
     try {
+        
         const response = await fetch(`/api/remove-favorite-book/${bookId}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: auth._id }),
             credentials: 'include',
         });
+         
         if (response.ok) {
-            const updatedFavorites = favoriteBooks.filter(book => book.id !== bookId);
-            setFavoriteBooks(updatedFavorites);
-            updateFavoriteBooks(updatedFavorites); // Update global context
-            console.log('Book removed from favorites:', bookId);
+          const data = await response.json();
+          const updatedFavorites = favoriteBooks.filter(book => book.id !== bookId);
+          //setFavoriteBooks(prevState => prevState.filter(book => book.id !== bookId));
+          //updateFavoriteBooks(prevState => prevState.filter(book => book.id !== bookId));
+          setFavoriteBooks(updatedFavorites); 
+          updateFavoriteBooks(updatedFavorites);
+          console.log(data); 
+          console.log('Book removed from favorites:', bookId);
         }
-    } catch (error) {
-        console.error('Failed to remove favorite book:', error);
-    }
-};
+      } catch (error) {
+          console.error('Failed to remove favorite book:', error);
+      }
+  };
 
   if (!auth) {
     return <div>Please log in to view this page.</div>;
@@ -95,8 +102,9 @@ const Profile = ({ isDarkMode }) => {
 
   // Function to handle selecting a book
   const handleBookSelect = (book) => {
+    console.log(book);
     setSelectedBook(book);
-    navigate(`/books/${book.id}`); // Navigate to the book ID page
+    navigate(`/books/${book._id}`); // Navigate to the book ID page
   };
 
   return (
@@ -129,12 +137,12 @@ const Profile = ({ isDarkMode }) => {
             <div className="flex flex-col gap-4 mt-2">
               {favoriteBooks && favoriteBooks.length > 0 ? (
                 favoriteBooks.map(book => (
-                  <div key={book._id} className="border p-2 rounded flex items-center">
+                  <li key={book.id} className="border p-2 rounded flex items-center">
                     <div onClick={() => handleBookSelect(book)}>
                       {book.title} by {book.author}
                     </div>
                     <button 
-                      onClick={() => removeBookFromFavorites(book.id)} 
+                      onClick={(e) => removeBookFromFavorites(e,book._id)} 
                       className="ml-auto text-red-500 hover:text-red-700"
                     >
                       <FontAwesomeIcon icon={faTrash} />
@@ -146,7 +154,7 @@ const Profile = ({ isDarkMode }) => {
                     >
                       View Book
                     </button>
-                  </div>
+                  </li>
                 ))
               ) : (
                 <p>No favorite books added.</p>

@@ -37,6 +37,7 @@ router.post('/register', async (req, res) => { // Ensure endpoint is lowercase t
 // Login route
 router.post('/login', async (req, res) => {
     try {
+        console.log(req.body);
         const { username, password } = req.body;
         
         // Find the user by username and ensure to populate necessary data if needed
@@ -67,7 +68,7 @@ router.post('/login', async (req, res) => {
             username: user.username,
             email: user.email,
             favoriteBooks: user.favoriteBooks.map(book => ({
-                id: book._id,
+                id: book.id,
                 title: book.title,
                 author: book.author,
                 coverImageUrl: book.coverImageUrl,
@@ -96,16 +97,20 @@ router.post('/login', async (req, res) => {
 // Logout route
 router.post('/logout', (req, res) => {
     res.clearCookie('token', {
-         path: '/', httpOnly: true, 
-         secure: process.env.NODE_ENV === 'production' 
+         path: '/', 
+         httpOnly: true, 
+         secure: process.env.NODE_ENV === 'production',
+         sameSite: 'strict'
     });
     res.json({ message: 'Logout successful' });
 });
 
 router.get('/verify', async (req, res) => {
     try {
+        console.log(req);
         // Retrieve the token from the HTTP-only cookie
-        const token = req.cookies['token'];
+        const token = req.cookies.token;
+
         if (!token) {
             return res.status(401).json({ isLoggedIn: false, user: null });
         }
@@ -131,9 +136,9 @@ router.get('/verify', async (req, res) => {
                 user: { 
                     username: user.username, 
                     email: user.email, 
-                    id: user._id,
-                    favoriteSubjects: user.favoriteSubjects, // Include favorite subjects
-                    favoriteBooks: user.favoriteBooks, // Include populated favorite books
+                    _id: user._id,
+                    favoriteSubjects: user.favoriteSubjects, 
+                    favoriteBooks: user.favoriteBooks, 
                 } 
             });        
         });
@@ -163,6 +168,7 @@ function validateToken(req, res, next) {
 router.put('/update-favorite-subjects', validateToken, async (req, res) => {
     const { subjects } = req.body;
     const userId = req.userId; // Get the user ID from the request after token validation
+    console.log(subjects);
 
     try {
         const user = await User.findById(userId);
@@ -221,12 +227,14 @@ router.delete('/remove-favorite-book/:bookId', validateToken, async (req, res) =
     const { bookId } = req.params;
     try {
       const user = await User.findById(userId);
+      console.log(user);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
       user.favoriteBooks = user.favoriteBooks.filter(book => book.toString() !== bookId);
+      console.log(user.favoriteBooks);
       await user.save();
-      res.status(200).json({ message: "Book removed from favorites" });
+      res.send({message: "Book removed from favorites" ,favoriteBooks: user.favoriteBooks}).status(200).end();
     } catch (error) {
       res.status(500).json({ message: "Failed to remove book from favorites", error: error.toString() });
     }

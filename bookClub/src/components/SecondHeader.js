@@ -9,11 +9,11 @@ const SecondHeader = ({isDarkMode}) => {
 
   const handleLogout = () => {
     logout(); 
-    navigate('/'); // Redirect to home after logout
+    navigate('/'); 
   };
   
   const handleProfile = () => {
-    navigate('/profile'); // Redirect to home after logout
+    navigate('/profile'); 
   };
 
   const capitalizeFirstLetter = (string) => {

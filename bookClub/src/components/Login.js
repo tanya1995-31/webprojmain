@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import AuthContext from "../context/AuthProvider";
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import SecondHeader from './SecondHeader';
 import Cookies from 'js-cookie';
 
 const LOGIN_URL = 'http://localhost:5000/api/login';
@@ -35,7 +34,6 @@ const Login = ({ isDarkMode }) => {
                 credentials: 'include',
                 body: JSON.stringify({ username: user, password: pwd })
             });
-    
             if (!response.ok) {
                 throw new Error('Login Failed');
             }
@@ -43,6 +41,7 @@ const Login = ({ isDarkMode }) => {
             const { user: userData } = await response.json();
             // After successful login, set cookies and auth state
             setAuth(userData);
+            console.log(userData);
             Cookies.set('isLoggedIn', 'true', { expires: 1 }); // Expires in 1 day
             Cookies.set('username', userData.username, { expires: 1 }); // Expires in 1 day
             navigate('/'); // Redirect to home after successful login

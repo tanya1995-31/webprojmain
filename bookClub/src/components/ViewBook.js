@@ -12,12 +12,13 @@ const ViewBook = ({isDarkMode}) => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
+        console.log(id);
         const response = await fetch(`http://localhost:5000/api/books/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch book');
         }
         const data = await response.json();
-        console.log(data); // Log the response data
+        console.log(data._id); // Log the response data
         setBook(data); // Set the fetched book data to state
       } catch (error) {
         console.error('Failed to fetch book:', error);
