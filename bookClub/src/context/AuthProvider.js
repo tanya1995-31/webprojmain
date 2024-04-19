@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         checkLoginStatus();
-        console.log("check check checks");
+    
     }, []);
 
     const checkLoginStatus = async () => {
