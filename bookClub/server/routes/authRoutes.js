@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
         // Send the JWT in a cookie with appropriate security settings
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production environment only
+            secure: true,  // Use secure cookies in production environment only
             maxAge: 3600000,  // 1 hour
             sameSite: 'strict'  // Strict sameSite policy to prevent CSRF
         });
@@ -99,7 +99,7 @@ router.post('/logout', (req, res) => {
     res.clearCookie('token', {
          path: '/', 
          httpOnly: true, 
-         secure: process.env.NODE_ENV === 'production',
+         secure: true,
          sameSite: 'strict'
     });
     res.json({ message: 'Logout successful' });
