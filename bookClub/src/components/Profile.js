@@ -22,11 +22,17 @@ const Profile = ({ isDarkMode }) => {
     { label: 'Kids', value: 'Kids' },
     { label: 'Fantasy', value: 'Fantasy' },
     { label: 'Magic', value: 'Magic' },
-    { label: 'Historical Fiction', value: 'Historical Fiction' },
-    { label: 'Mystery and detective stories', value: 'Mystery and detective stories' },
     { label: 'Horror', value: 'Horror' },
+    { label: 'Humor', value: 'Humor' },
+    { label: 'Thriller', value: 'Thriller' },
+    { label: 'Psychology', value: 'Psychology' },
+    { label: 'Archaeology', value: 'Archaeology' },
+   
   ]);
-
+/* 
+ { label: 'Historical Fiction', value: 'Historical Fiction' },
+    { label: 'Mystery and detective stories', value: 'Mystery and detective stories' },
+*/
   useEffect(() => {
     // This will update the local state when the global state changes
     if (auth?.favoriteBooks) {
@@ -114,7 +120,7 @@ const Profile = ({ isDarkMode }) => {
       color: isDarkMode ? 'black' : provided.color,
     }),
   };
-  
+
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
       <Header header='Profile' isDarkMode={isDarkMode} />

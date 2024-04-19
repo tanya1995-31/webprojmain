@@ -12,11 +12,23 @@
     const [search, setSearch] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [searchInitiated, setSearchInitiated] = useState(false);
-    const [booksDataBySubject, setBooksDataBySubject] = useState({ romance: [], love: [], kids: [], fantasy: [] });
+    const [booksDataBySubject, setBooksDataBySubject] = useState({
+       romance: [],
+       love: [],
+       kids: [],
+       fantasy: [],
+       magic: [],
+       horror: [],
+       humor: [],
+       thriller: [],
+       psychology: [],
+       archaeology: []
+    });
     const [favoriteBooks, setFavoriteBooks] = useState([]);
     const [successMessage, setSuccessMessage] = useState('');
 
-    const subjects = ['romance', 'love', 'kids', 'fantasy'];
+    const subjects = ['romance', 'love', 'kids', 'fantasy', 'magic', 'horror', 'humor', 'thriller','psychology', 'archaeology'];
+
     const navigate = useNavigate();
 
     const { auth } = useContext(AuthContext);

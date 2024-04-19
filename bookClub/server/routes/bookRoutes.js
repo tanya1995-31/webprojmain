@@ -7,7 +7,7 @@ const router = express.Router();
 // Function to fetch and store books by subject
 const fetchAndStoreBooks = async () => {
     try {
-      const subjects = ['romance', 'love', 'kids', 'fantasy'];
+      const subjects = ['romance', 'love', 'kids', 'fantasy', 'magic', 'horror', 'humor', 'thriller','psychology', 'archaeology'];     
       for (const subject of subjects) {
         const url = `https://openlibrary.org/subjects/${subject}.json?limit=15`;
         const response = await fetch(url);
