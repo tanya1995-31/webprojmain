@@ -3,7 +3,7 @@ const router = express.Router();
 //const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
+const JWT_SECRET=mySuperSecretKey12345;
 // Register user
 router.post('/register', async (req, res) => { // Ensure endpoint is lowercase to match the client-side
     try {
@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
         // Create token
         const token = jwt.sign(
             { id: user._id, username: user.username }, 
-            process.env.JWT_SECRET,
+            JWT_SECRET,
             { expiresIn: '1h' }  
         );
 
@@ -116,7 +116,7 @@ router.get('/verify', async (req, res) => {
         }
 
         // Verify the token
-        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
+        jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
             if (err) {
                 return res.status(401).json({ isLoggedIn: false, user: null });
             }
@@ -155,7 +155,7 @@ function validateToken(req, res, next) {
         return res.status(401).json({ message: "Authorization denied, no token" });
     }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET);
         req.userId = decoded.id;
         next();
     } catch (e) {
