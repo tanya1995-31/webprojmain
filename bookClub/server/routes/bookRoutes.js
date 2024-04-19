@@ -57,7 +57,7 @@ router.get('https://webprojmainserver.vercel.app/books/:id', async (req, res) =>
 });
 
 // Add a comment to a book
-router.post('/books/:id/comments', async (req, res) => {
+router.post('https://webprojmainserver.vercel.app/books/:id/comments', async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -80,7 +80,7 @@ router.post('/books/:id/comments', async (req, res) => {
   }
 });
 // Route to fetch comments for a specific book
-router.get('/books/:id/comments', async (req, res) => {
+router.get('https://webprojmainserver.vercel.app/books/:id/comments', async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -114,7 +114,7 @@ router.get('/books/:id/comments', async (req, res) => {
 //******************************* */
 
 // Route to fetch and store books by subject
-router.get('/fetch-books', async (req, res) => {
+router.get('https://webprojmainserver.vercel.app/fetch-books', async (req, res) => {
   res.status(200).json({ message: 'Fetching and storing books automatically triggered' });
 });
 
@@ -134,7 +134,7 @@ router.get('/books', async (req, res) => {
 });
 
 // Get router for Seach Books
-router.get('/search-books', async (req, res) => {
+router.get('https://webprojmainserver.vercel.app/search-books', async (req, res) => {
   try {
     const query = req.query.query;
     const books = await Book.find({
@@ -153,7 +153,7 @@ router.get('/search-books', async (req, res) => {
 
 
 // Add a comment to a book
-router.post('/books/:id/comments', async (req, res) => {
+router.post('https://webprojmainserver.vercel.app/books/:id/comments', async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -177,7 +177,7 @@ router.post('/books/:id/comments', async (req, res) => {
 });
 
 // Route to fetch comments for a specific book
-router.get('/books/:id/comments', async (req, res) => {
+router.get('https://webprojmainserver.vercel.app/books/:id/comments', async (req, res) => {
   try {
     // Find all comments associated with the book ID
     const comments = await Comments.find({ bookId: req.params.id });
