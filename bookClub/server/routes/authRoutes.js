@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
@@ -10,12 +10,12 @@ router.post('/register', async (req, res) => { // Ensure endpoint is lowercase t
         const { username, password, email } = req.body;
   
         // Hash the password 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        //const hashedPassword = await bcrypt.hash(password, 10);
   
         // Create a new user with the hashed password
         const user = new User({ 
             username, 
-            password: hashedPassword, // Use the hashed password here
+            password: password, // Use the hashed password here
             email 
         });
   
