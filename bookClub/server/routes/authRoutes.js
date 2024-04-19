@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 // Register user
-router.post('/register', async (req, res) => { // Ensure endpoint is lowercase to match the client-side
+router.post('/api/register', async (req, res) => { // Ensure endpoint is lowercase to match the client-side
     try {
         const { username, password, email } = req.body;
   
@@ -35,7 +35,7 @@ router.post('/register', async (req, res) => { // Ensure endpoint is lowercase t
 }); 
 
 // Login route
-router.post('/login', async (req, res) => {
+router.post('/api/login', async (req, res) => {
     try {
         console.log(req.body);
         const { username, password } = req.body;
@@ -95,7 +95,7 @@ router.post('/login', async (req, res) => {
 
 
 // Logout route
-router.post('/logout', (req, res) => {
+router.post('/api/logout', (req, res) => {
     res.clearCookie('token', {
          path: '/', 
          httpOnly: true, 
@@ -105,7 +105,7 @@ router.post('/logout', (req, res) => {
     res.json({ message: 'Logout successful' });
 });
 
-router.get('/verify', async (req, res) => {
+router.get('/api/verify', async (req, res) => {
     try {
         console.log(req);
         // Retrieve the token from the HTTP-only cookie
@@ -165,7 +165,7 @@ function validateToken(req, res, next) {
 }
 
 // Update the favorite subjects of the user
-router.put('/update-favorite-subjects', validateToken, async (req, res) => {
+router.put('/api/update-favorite-subjects', validateToken, async (req, res) => {
     const { subjects } = req.body;
     const userId = req.userId; // Get the user ID from the request after token validation
     console.log(subjects);
@@ -190,7 +190,7 @@ router.put('/update-favorite-subjects', validateToken, async (req, res) => {
 });
 
 
-router.put('/update-favorite-books', validateToken, async (req, res) => {
+router.put('/api/update-favorite-books', validateToken, async (req, res) => {
     try {
         console.log('Received request:', req.body);
         const { userId, bookId } = req.body;
@@ -222,7 +222,7 @@ router.put('/update-favorite-books', validateToken, async (req, res) => {
 });
 
 // Remove book from favorites list
-router.delete('/remove-favorite-book/:bookId', validateToken, async (req, res) => {
+router.delete('/api/remove-favorite-book/:bookId', validateToken, async (req, res) => {
     const { userId } = req.body;
     const { bookId } = req.params;
     try {
