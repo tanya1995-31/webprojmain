@@ -32,6 +32,16 @@ mongoose.connect(MONGODB_URI, {
 .then(() => console.log('MongoDB connected'))
 .catch((err) => console.log(err));
 
+app.get('/health', (req, res) => {
+  mongoose.connection.db.admin().ping((err) => {
+    if (err) {
+      res.status(500).json({ status: 'error', message: 'Database connection failed' });
+    } else {
+      res.json({ status: 'success', message: 'Database connection successful' });
+    }
+  });
+});
+
 // Prefix all bookRoutes and authRoutes with '/api'
 app.use('/api', bookRoutes);
 app.use('/api', authRoutes);
