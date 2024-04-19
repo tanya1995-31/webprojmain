@@ -82,7 +82,7 @@ router.post('/login', async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production environment only
             maxAge: 3600000,  // 1 hour
-            sameSite: 'strict '  // Strict sameSite policy to prevent CSRF
+            sameSite: 'strict'  // Strict sameSite policy to prevent CSRF
         });
 
         // Respond with user data
