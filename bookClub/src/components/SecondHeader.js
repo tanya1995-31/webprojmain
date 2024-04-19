@@ -29,7 +29,7 @@ const SecondHeader = ({isDarkMode}) => {
       <Link to="/contactus" className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors mr-4">Contact Us</Link>
       {isLoggedIn ? (
         <>
-          <button onClick={handleLogout} className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors">Log Out</button>
+          <button onClick={handleLogout} className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors">Sign Out</button>
           <button onClick={handleProfile} className="px-4 py-2 text-sm font-semibold rounded-lg hover:bg-white hover:text-blue-500 transition-colors">Profile</button>
         <span className="mr-4 text-sm font-semibold">Welcome, {capitalizeFirstLetter(auth.username)}</span>
         </>
