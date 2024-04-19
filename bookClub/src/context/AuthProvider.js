@@ -5,10 +5,10 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState(null);
 
-    useEffect(() => {
+    /*useEffect(() => {
         checkLoginStatus();
     
-    }, []);
+    }, []);*/
 
     const checkLoginStatus = async () => {
         try {
