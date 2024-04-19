@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
             if (!response.ok) {
                 throw new Error('Not logged in');
             }
-
+            console.log(response.json());
             const data = await response.json();
             if (data.isLoggedIn) {
                 setAuth(data.user);
