@@ -119,7 +119,7 @@ router.get('https://webprojmainserver.vercel.app/fetch-books', async (req, res) 
 });
 
 // Fetch the books by subject from mongoDB
-router.get('/books', async (req, res) => {
+router.get('https://webprojmainserver.vercel.app/books', async (req, res) => {
   try {
     let query = {};
     if (req.query.subject) {
