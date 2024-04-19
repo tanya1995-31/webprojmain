@@ -11,14 +11,20 @@
   import Profile from './components/Profile';
   import SecondHeader from './components/SecondHeader';
   import logo from './images/bookclub_logo.png';
+  import Cookies from 'js-cookie';
 
   function App() {
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+      return Cookies.get('isDarkMode') === 'true';
+    });
 
     const toggleDarkMode = () => {
-      setIsDarkMode(prevMode => !prevMode);
-      // You can also save the user preference in localStorage or cookies
-    };
+    setIsDarkMode(prevMode => {
+      const newMode = !prevMode;
+      Cookies.set('isDarkMode', newMode, { expires: 7 }); // Expires in 7 days
+      return newMode;
+    });
+  };
 
     return (
       <AuthProvider>
