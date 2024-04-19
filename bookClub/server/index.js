@@ -23,7 +23,7 @@ app.use(cors(corsOptions));
 
 // Parse JSON bodies (as sent by API clients)
 app.use(express.json());
-const  MONGODB_URI="mongodb+srv://omri:webproject@cluster0.mlpcjwh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const  MONGODB_URI="mongodb+srv://omri:webproject@cluster0.mlpcjwh.mongodb.net/"
 // Connect to MongoDB
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
