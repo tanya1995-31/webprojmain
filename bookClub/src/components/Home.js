@@ -100,7 +100,10 @@
       try {
         const response = await fetch('https://webprojmainserver.vercel.app/api/update-favorite-books', {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${Cookies.get('token')}` // Include the JWT token in the Authorization header
+          },
           body: JSON.stringify({ userId: auth._id, bookId: bookId }), // Send userId and bookId in the request body
           credentials: 'include',
         });
