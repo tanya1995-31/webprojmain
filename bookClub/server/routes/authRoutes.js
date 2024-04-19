@@ -3,7 +3,7 @@ const router = express.Router();
 //const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const JWT_SECRET=mySuperSecretKey12345;
+
 // Register user
 router.post('/register', async (req, res) => { // Ensure endpoint is lowercase to match the client-side
     try {
@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
         // Create token
         const token = jwt.sign(
             { id: user._id, username: user.username }, 
-            JWT_SECRET,
+            process.env.JWT_SECRET,
             { expiresIn: '1h' }  
         );
 
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
         // Send the JWT in a cookie with appropriate security settings
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,  // Use secure cookies in production environment only
+            secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production environment only
             maxAge: 3600000,  // 1 hour
             sameSite: 'strict'  // Strict sameSite policy to prevent CSRF
         });
@@ -99,7 +99,7 @@ router.post('/logout', (req, res) => {
     res.clearCookie('token', {
          path: '/', 
          httpOnly: true, 
-         secure: true,
+         secure: process.env.NODE_ENV === 'production',
          sameSite: 'strict'
     });
     res.json({ message: 'Logout successful' });
@@ -116,7 +116,7 @@ router.get('/verify', async (req, res) => {
         }
 
         // Verify the token
-        jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
                 return res.status(401).json({ isLoggedIn: false, user: null });
             }
@@ -155,7 +155,7 @@ function validateToken(req, res, next) {
         return res.status(401).json({ message: "Authorization denied, no token" });
     }
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.userId = decoded.id;
         next();
     } catch (e) {
