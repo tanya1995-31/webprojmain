@@ -22,7 +22,7 @@ const Comments = ({ bookId, isDarkMode }) => {
   useEffect(() => {
     fetchComments(); // Fetch comments initially
 
-    const interval = setInterval(fetchComments, 5000); // Poll for updates every 5 seconds
+    const interval = setInterval(fetchComments, 2000); // Poll for updates every 5 seconds
 
     // Clean up function to clear the interval when the component unmounts
     return () => clearInterval(interval);

@@ -14,6 +14,7 @@ const SecondHeader = ({isDarkMode}) => {
   
   const handleProfile = () => {
     navigate('/profile'); 
+    window.location.reload();
   };
 
   const capitalizeFirstLetter = (string) => {

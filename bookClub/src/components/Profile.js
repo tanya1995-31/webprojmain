@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from "../context/AuthProvider";
 import Header from './Header';
-import SecondHeader from './SecondHeader';
 import Select from 'react-select';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,7 +8,7 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for n
 
 const Profile = ({ isDarkMode }) => {
   
-  const { auth, checkLoginStatus, updateFavoriteBooks } = useContext(AuthContext);
+  const { auth, updateFavoriteBooks } = useContext(AuthContext);
   const [favoriteSubjects, setFavoriteSubjects] = useState([]);
   const [initialFavoriteSubjects, setInitialFavoriteSubjects] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
@@ -55,7 +54,8 @@ const Profile = ({ isDarkMode }) => {
       if (response.ok) {
         const data = await response.json();
         setSuccessMessage(data.message);
-        updateFavoriteBooks(data.favoriteBooks); // Update global context
+        setFavoriteSubjects(favoriteSubjects); // Update the favoriteSubjects state to trigger re-render
+        console.log(data);
       } else {
         const errorData = await response.json();
         throw new Error(errorData.message);
@@ -84,6 +84,7 @@ const Profile = ({ isDarkMode }) => {
           //updateFavoriteBooks(prevState => prevState.filter(book => book.id !== bookId));
           setFavoriteBooks(updatedFavorites); 
           updateFavoriteBooks(updatedFavorites);
+          window.location.reload();
           console.log(data); 
           console.log('Book removed from favorites:', bookId);
         }
@@ -111,7 +112,7 @@ const Profile = ({ isDarkMode }) => {
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-300'}`}>
       <Header header='Profile' isDarkMode={isDarkMode} />
       <div className="flex flex-col items-center p-4">
-        <div className="w-full max-w-2xl p-6 rounded-lg shadow-md">
+        <div className={`w-full max-w-2xl p-6 rounded-lg shadow-md ${isDarkMode ? 'text-white' : 'text-gray-700 '}`}>
           <h1 className="text-2xl font-bold mb-4">User Profile</h1>
           <p className="text-lg"><strong>Username:</strong> {username}</p>
           <p className="text-lg"><strong>Email:</strong> {email}</p>
@@ -137,7 +138,7 @@ const Profile = ({ isDarkMode }) => {
             <div className="flex flex-col gap-4 mt-2">
               {favoriteBooks && favoriteBooks.length > 0 ? (
                 favoriteBooks.map(book => (
-                  <li key={book.id} className="border p-2 rounded flex items-center">
+                  <li key={book._id} className="border p-2 rounded flex items-center">
                     <div onClick={() => handleBookSelect(book)}>
                       {book.title} by {book.author}
                     </div>
