@@ -5,10 +5,10 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState(null);
 
-    /*useEffect(() => {
+    useEffect(() => {
         checkLoginStatus();
     
-    }, []);*/
+    }, []);
 
     const checkLoginStatus = async () => {
         try {
@@ -25,11 +25,11 @@ export const AuthProvider = ({ children }) => {
             if (data.isLoggedIn) {
                 setAuth(data.user);
             } else {
-                setAuth(null);
+                //setAuth(null);
             }
         } catch (error) {
             console.error('Error during auth verification:', error);
-            setAuth(null);
+            //setAuth(null);
         }
     };
 
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (response.ok) {
-                setAuth(null);
+                //setAuth(null);
             }
         } catch (error) {
             console.error('Logout failed:', error);
