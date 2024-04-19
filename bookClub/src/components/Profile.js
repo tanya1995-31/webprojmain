@@ -108,8 +108,15 @@ const Profile = ({ isDarkMode }) => {
     navigate(`/books/${book._id}`); // Navigate to the book ID page
   };
 
+  const selectStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      color: isDarkMode ? 'black' : provided.color,
+    }),
+  };
+  
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-300'}`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
       <Header header='Profile' isDarkMode={isDarkMode} />
       <div className="flex flex-col items-center p-4">
         <div className={`w-full max-w-2xl p-6 rounded-lg shadow-md ${isDarkMode ? 'text-white' : 'text-gray-700 '}`}>
@@ -123,6 +130,7 @@ const Profile = ({ isDarkMode }) => {
               value={availableSubjects.filter(option => favoriteSubjects.includes(option.value))}
               onChange={handleSubjectChange}
               options={availableSubjects}
+              styles={selectStyles}
             />
             <button 
               onClick={handleSaveSubjects} 

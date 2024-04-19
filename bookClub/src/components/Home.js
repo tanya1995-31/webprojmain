@@ -138,7 +138,7 @@
 
     return (
       <div>
-        <Header header='Books Club Web' isDarkMode={isDarkMode} />
+        <Header header='Magic Books Club' isDarkMode={isDarkMode} />
         <SearchBar
           search={search}
           setSearch={(value) => {
