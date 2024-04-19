@@ -42,7 +42,7 @@ fetchAndStoreBooks();
 //******************************* */
 // Fetch a single book by ID from MongoDB
 
-router.get('https://webprojmainserver.vercel.app/books/:id', async (req, res) => {
+router.get('/books/:id', async (req, res) => {
   console.log(req.body);
   try {
     const book = await Book.findById(req.params.id);
@@ -119,7 +119,7 @@ router.get('https://webprojmainserver.vercel.app/fetch-books', async (req, res) 
 });
 
 // Fetch the books by subject from mongoDB
-router.get('https://webprojmainserver.vercel.app/books', async (req, res) => {
+router.get('/books', async (req, res) => {
   try {
     let query = {};
     if (req.query.subject) {
