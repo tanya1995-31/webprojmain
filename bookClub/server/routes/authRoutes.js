@@ -55,13 +55,6 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // Create token
-        const token = jwt.sign(
-            { id: user._id, username: user.username }, 
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }  
-        );
-
         // Prepare user data to send back
         const userData = {
             _id: user._id,
@@ -77,6 +70,13 @@ router.post('/login', async (req, res) => {
             favoriteSubjects: user.favoriteSubjects  // Ensure the user model supports this attribute
         };
 
+         // Create token
+        const token = jwt.sign(
+            { id: user._id, username: user.username }, 
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }  
+        );
+        
         // Send the JWT in a cookie with appropriate security settings
         res.cookie('token', token, {
             httpOnly: true,
@@ -85,6 +85,8 @@ router.post('/login', async (req, res) => {
             sameSite: 'lax'  // Strict sameSite policy to prevent CSRF
         });
 
+        
+        
         // Respond with user data
         res.json({ message: "Login successful", user: userData });
     } catch (error) {
@@ -109,11 +111,28 @@ router.get('/verify', async (req, res) => {
     try {
         console.log(req);
         // Retrieve the token from the HTTP-only cookie
-        const token = req.cookies.token;
+        const username = req.cookies.username;
+        const user = await User.findOne({ username }).populate('favoriteBooks');
 
-        if (!token) {
+        // Create token
+        const token = jwt.sign(
+            { id: user._id, username: user.username }, 
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }  
+        );
+        
+        // Send the JWT in a cookie with appropriate security settings
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production environment only
+            maxAge: 3600000,  // 1 hour
+            sameSite: 'lax'  // Strict sameSite policy to prevent CSRF
+        });
+        
+        
+        /*if (!token) {
             return res.status(401).json({ moshe: true, isLoggedIn: false, user: null });
-        }
+        }*/
 
         // Verify the token
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
