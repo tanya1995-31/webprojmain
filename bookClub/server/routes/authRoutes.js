@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
         }
 
         // Compare the provided password with the hashed password in the database
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await compare(password, user.password);
         if (!isMatch) {
             // Passwords do not match
             return res.status(401).json({ message: "Invalid credentials" });
