@@ -112,13 +112,13 @@ router.get('/verify', async (req, res) => {
         const token = req.cookies.token;
 
         if (!token) {
-            return res.status(401).json({ isLoggedIn: false, user: null });
+            return res.status(401).json({ moshe: true, isLoggedIn: false, user: null });
         }
 
         // Verify the token
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
-                return res.status(401).json({ isLoggedIn: false, user: null });
+                return res.status(401).json({ David: true, isLoggedIn: false, user: null });
             }
             // If token is verified, find the user in the database
             const user = await User.findById(decodedToken.id)
@@ -127,7 +127,7 @@ router.get('/verify', async (req, res) => {
                 .exec(); // Execute the query
 
             if (!user) {
-                return res.status(401).json({ isLoggedIn: false, user: null });
+                return res.status(401).json({ yakov: true, isLoggedIn: false, user: null });
             }
 
             // Respond with the user's information if everything is valid
