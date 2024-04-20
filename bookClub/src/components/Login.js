@@ -42,8 +42,16 @@ const Login = ({ isDarkMode }) => {
             // After successful login, set cookies and auth state
             setAuth(userData);
             console.log(userData);
-            Cookies.set('isLoggedIn', 'true', { expires: 1 }); // Expires in 1 day
-            Cookies.set('username', userData.username, { expires: 1 }); // Expires in 1 day
+            Cookies.set('isLoggedIn', 'true', { 
+                expires: 1, // Expires in 1 day
+                sameSite: 'None', // Allow cross-site requests
+                secure: true // Cookie sent only over HTTPS
+            });
+            Cookies.set('username', userData.username, { 
+                expires: 1, // Expires in 1 day
+                sameSite: 'None', // Allow cross-site requests
+                secure: true // Cookie sent only over HTTPS
+            });
             navigate('/'); // Redirect to home after successful login
         } catch (err) {
             setErrMsg('Login Failed');
