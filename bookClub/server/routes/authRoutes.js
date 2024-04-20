@@ -82,12 +82,9 @@ router.post('/login', async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production environment only
             maxAge: 3600000,  // 1 hour
-            sameSite: 'lax'  // Strict sameSite policy to prevent CSRF
+            sameSite: 'None'  // Strict sameSite policy to prevent CSRF
         });
 
-        
-        
-        // Respond with user data
         res.json({ message: "Login successful", user: userData });
     } catch (error) {
         console.error("Server error:", error);
@@ -102,42 +99,17 @@ router.post('/logout', (req, res) => {
          path: '/', 
          httpOnly: true, 
          secure: process.env.NODE_ENV === 'production',
-         sameSite: 'lax'
+         sameSite: 'None'
     });
     res.json({ message: 'Logout successful' });
 });
 
 router.get('/verify', async (req, res) => {
     try {
-        console.log(req);
-        // Retrieve the token from the HTTP-only cookie
-        const username = req.cookies.username;
-        const user = await User.findOne({ username }).populate('favoriteBooks');
-
-        // Create token
-        const token = jwt.sign(
-            { id: user._id, username: user.username }, 
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }  
-        );
-        
-        // Send the JWT in a cookie with appropriate security settings
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production environment only
-            maxAge: 3600000,  // 1 hour
-            sameSite: 'lax'  // Strict sameSite policy to prevent CSRF
-        });
-        
-        
-        /*if (!token) {
-            return res.status(401).json({ moshe: true, isLoggedIn: false, user: null });
-        }*/
-
-        // Verify the token
+        const token = req.cookies.token;
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
-                return res.status(401).json({ David: true, isLoggedIn: false, user: null });
+                return res.status(401).json("Invalid token or token expired");
             }
             // If token is verified, find the user in the database
             const user = await User.findById(decodedToken.id)
@@ -146,7 +118,7 @@ router.get('/verify', async (req, res) => {
                 .exec(); // Execute the query
 
             if (!user) {
-                return res.status(401).json({ yakov: true, isLoggedIn: false, user: null });
+                return res.status(401).json({ Reason: "No user found in DB", isLoggedIn: false, user: null });
             }
 
             // Respond with the user's information if everything is valid

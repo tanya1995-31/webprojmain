@@ -20,16 +20,15 @@ export const AuthProvider = ({ children }) => {
             if (!response.ok) {
                 throw new Error('Not logged in');
             }
-            console.log(response.json());
-            const data = await response.json();
+            const data = await response.json(); 
             if (data.isLoggedIn) {
                 setAuth(data.user);
             } else {
-                //setAuth(null);
+                setAuth(null);
             }
         } catch (error) {
             console.error('Error during auth verification:', error);
-            //setAuth(null);
+            setAuth(null);
         }
     };
 
@@ -45,7 +44,7 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (response.ok) {
-                //setAuth(null);
+                setAuth(null);
             }
         } catch (error) {
             console.error('Logout failed:', error);
